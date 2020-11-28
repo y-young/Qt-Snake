@@ -72,6 +72,8 @@ public:
     void move();
     void draw(QPainter *painter);
     void setHeading(Heading newHeading);
+    void grow();
+    QPoint head();
 protected:
 
 private:

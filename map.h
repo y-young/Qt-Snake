@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QTimer>
 #include "snake.h"
+#include "foods.h"
 #define RENDERSPEED 40
 
 namespace Ui {
@@ -21,8 +22,10 @@ protected:
 private:
     Ui::Map *ui;
     Snake *snake;
+    Foods *foods;
     QTimer *timer;
     void snakeMove();
+    void checkEat();
 };
 
 #endif // MAP_H

@@ -9,14 +9,21 @@ Map::Map(QWidget *parent) :
 {
     ui->setupUi(this);
     snake = new Snake();
+    foods = new Foods();
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&Map::snakeMove));
+    connect(timer, &QTimer::timeout, this, QOverload<>::of(&Map::checkEat));
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&Map::update));
     timer->start(RENDERSPEED);
 }
 
 void Map::snakeMove() {
     snake->move();
+}
+void Map::checkEat() {
+    if(foods->check(snake->head())) {
+        snake->grow();
+    }
 }
 void Map::paintEvent(QPaintEvent *)
 {
@@ -28,8 +35,8 @@ void Map::paintEvent(QPaintEvent *)
     painter.scale(side / 200.0, side / 200.0);
 
     painter.setPen(Qt::NoPen);
-    painter.setBrush(QColor(255,0,0));
     snake->draw(&painter);
+    foods->draw(&painter);
 }
 
 void Map::keyPressEvent(QKeyEvent *event) {
@@ -59,5 +66,6 @@ void Map::keyPressEvent(QKeyEvent *event) {
 Map::~Map()
 {
     delete snake;
+    delete foods;
     delete ui;
 }

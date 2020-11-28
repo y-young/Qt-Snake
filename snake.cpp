@@ -57,7 +57,7 @@
 Snake::Snake(QWidget *parent)
     : QWidget(parent)
 {
-    for(int i = -10*SIZE; i <= 0; i+=SIZE) {
+    for(int i = -3*SIZE; i <= 0; i+=SIZE) {
         body.push_back(QPoint(i,0));
     }
     heading = RIGHT;
@@ -65,6 +65,7 @@ Snake::Snake(QWidget *parent)
 
 void Snake::draw(QPainter *painter)
 {
+    painter->setBrush(QColor(255,0,0));
     for(int i = body.size() - 1; i >= 0; --i) {
         QPoint p = body[i];
         painter->drawRect(p.rx(), p.ry(), SIZE, SIZE);
@@ -78,10 +79,30 @@ void Snake::setHeading(Heading newHeading) {
     heading = newHeading;
 }
 
+void Snake::grow() {
+    QPoint tail = body.front();
+    int dx, dy;
+    if(body.size() > 1) {
+        QPoint beforeTail = body.at(1);
+        dx = tail.rx() - beforeTail.rx();
+        dy = tail.ry() - beforeTail.ry();
+
+    } else {
+        dx = direction[heading][0];
+        dy = direction[heading][1];
+    }
+    tail.setX(tail.rx() + dx);
+    tail.setY(tail.ry() + dy);
+    body.push_front(tail);
+}
+
 void Snake::move() {
     QPoint head = body.back();
     body.pop_front();
     head.setX(head.rx() + direction[heading][0]);
     head.setY(head.ry() + direction[heading][1]);
     body.push_back(head);
+}
+QPoint Snake::head() {
+    return body.back();
 }
