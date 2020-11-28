@@ -57,7 +57,6 @@
 
 #define SPEED 4
 #define SIZE 4
-#define RENDERSPEED 40
 
 enum Heading {UP, DOWN, LEFT, RIGHT};
 const int direction[4][2] = {
@@ -70,14 +69,14 @@ class Snake : public QWidget
 
 public:
     Snake(QWidget *parent = nullptr);
-
+    void move();
+    void draw(QPainter *painter);
+    void setHeading(Heading newHeading);
 protected:
-    void paintEvent(QPaintEvent *event) override;
-    void keyPressEvent(QKeyEvent *event) override;
+
 private:
     QVector<QPoint> body;
     Heading heading;
-    void move();
 };
 
 #endif

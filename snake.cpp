@@ -51,60 +51,27 @@
 #include "snake.h"
 
 #include <QPainter>
-#include <QTime>
 #include <QTimer>
 #include <QtDebug>
 
 Snake::Snake(QWidget *parent)
     : QWidget(parent)
 {
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, QOverload<>::of(&Snake::move));
-    connect(timer, &QTimer::timeout, this, QOverload<>::of(&Snake::update));
-    timer->start(RENDERSPEED);
     for(int i = -10*SIZE; i <= 0; i+=SIZE) {
         body.push_back(QPoint(i,0));
     }
-
-    setWindowTitle(tr("Snake"));
-    resize(900, 600);
     heading = RIGHT;
 }
 
-void Snake::paintEvent(QPaintEvent *)
+void Snake::draw(QPainter *painter)
 {
-    int side = qMin(width(), height());
-
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.translate(width() / 2, height() / 2);
-    painter.scale(side / 200.0, side / 200.0);
-
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(QColor(255,0,0));
     for(int i = body.size() - 1; i >= 0; --i) {
         QPoint p = body[i];
-        painter.drawRect(p.rx(), p.ry(), SIZE, SIZE);
+        painter->drawRect(p.rx(), p.ry(), SIZE, SIZE);
     }
 }
 
-void Snake::keyPressEvent(QKeyEvent *event) {
-    int key = event->key();
-    Heading newHeading;
-    switch(key) {
-    case Qt::Key_Up:
-        newHeading = UP;
-        break;
-    case Qt::Key_Down:
-        newHeading = DOWN;
-        break;
-    case Qt::Key_Left:
-        newHeading = LEFT;
-        break;
-    case Qt::Key_Right:
-        newHeading = RIGHT;
-        break;
-    }
+void Snake::setHeading(Heading newHeading) {
     if(direction[heading][0] + direction[newHeading][0] == 0  || direction[heading][1] + direction[newHeading][1] == 0) {
         return;
     }
@@ -114,7 +81,6 @@ void Snake::keyPressEvent(QKeyEvent *event) {
 void Snake::move() {
     QPoint head = body.back();
     body.pop_front();
-//    qDebug() << head;
     head.setX(head.rx() + direction[heading][0]);
     head.setY(head.ry() + direction[heading][1]);
     body.push_back(head);

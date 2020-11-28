@@ -50,12 +50,12 @@
 
 #include <QApplication>
 
-#include "snake.h"
+#include "map.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    Snake snake;
-    snake.show();
+    Map map;
+    map.show();
     return app.exec();
 }
