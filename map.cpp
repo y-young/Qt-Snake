@@ -9,6 +9,7 @@ Map::Map(QWidget *parent) :
 {
     ui->setupUi(this);
     snake = new Snake();
+    snake1 = new Snake(nullptr, LEFT, "blue");
     foods = new Foods();
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&Map::snakeMove));
@@ -19,10 +20,18 @@ Map::Map(QWidget *parent) :
 
 void Map::snakeMove() {
     snake->move();
+    if(snake1 != nullptr) {
+        snake1->move();
+    }
 }
 void Map::checkEat() {
     if(foods->check(snake->head())) {
         snake->grow();
+    }
+    if(snake1 != nullptr) {
+        if(foods->check(snake1->head())) {
+            snake1->grow();
+        }
     }
 }
 void Map::paintEvent(QPaintEvent *)
@@ -36,6 +45,9 @@ void Map::paintEvent(QPaintEvent *)
 
     painter.setPen(Qt::NoPen);
     snake->draw(&painter);
+    if(snake1 != nullptr) {
+        snake1->draw(&painter);
+    }
     foods->draw(&painter);
 }
 
@@ -48,24 +60,20 @@ void Map::keyPressEvent(QKeyEvent *event) {
     case Qt::Key_R:
         timer->start(RENDERSPEED);
         break;
-    case Qt::Key_Up:
-        snake->setHeading(UP);
-        break;
-    case Qt::Key_Down:
-        snake->setHeading(DOWN);
-        break;
-    case Qt::Key_Left:
-        snake->setHeading(LEFT);
-        break;
-    case Qt::Key_Right:
-        snake->setHeading(RIGHT);
-        break;
+    default:
+        snake->keyEvent1(key);
+        if(snake1 != nullptr) {
+            snake1->keyEvent2(key);
+        }
     }
 }
 
 Map::~Map()
 {
     delete snake;
+    if(snake1 != nullptr) {
+        delete snake1;
+    }
     delete foods;
     delete ui;
 }

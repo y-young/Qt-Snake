@@ -68,17 +68,20 @@ class Snake : public QWidget
     Q_OBJECT
 
 public:
-    Snake(QWidget *parent = nullptr);
+    Snake(QWidget *parent = nullptr, Heading h=RIGHT, QString c="red");
     void move();
     void draw(QPainter *painter);
     void setHeading(Heading newHeading);
     void grow();
+    void keyEvent1(int key);
+    void keyEvent2(int key);
     QPoint head();
 protected:
 
 private:
     QVector<QPoint> body;
     Heading heading;
+    QColor color;
 };
 
 #endif

@@ -54,31 +54,61 @@
 #include <QTimer>
 #include <QtDebug>
 
-Snake::Snake(QWidget *parent)
+Snake::Snake(QWidget *parent, Heading h, QString c)
     : QWidget(parent)
 {
-    for(int i = -3*SIZE; i <= 0; i+=SIZE) {
+    for(int i = -direction[h][0]*SIZE; i != 0; i+=direction[h][0]) {
         body.push_back(QPoint(i,0));
     }
-    heading = RIGHT;
+    heading = h;
+    color = QColor(c);
 }
-
 void Snake::draw(QPainter *painter)
 {
-    painter->setBrush(QColor(255,0,0));
+    painter->setBrush(color);
     for(int i = body.size() - 1; i >= 0; --i) {
         QPoint p = body[i];
         painter->drawRect(p.rx(), p.ry(), SIZE, SIZE);
     }
 }
-
 void Snake::setHeading(Heading newHeading) {
     if(direction[heading][0] + direction[newHeading][0] == 0  || direction[heading][1] + direction[newHeading][1] == 0) {
         return;
     }
     heading = newHeading;
 }
-
+void Snake::keyEvent1(int key) {
+    switch(key) {
+    case Qt::Key_Up:
+        setHeading(UP);
+        break;
+    case Qt::Key_Down:
+        setHeading(DOWN);
+        break;
+    case Qt::Key_Left:
+        setHeading(LEFT);
+        break;
+    case Qt::Key_Right:
+        setHeading(RIGHT);
+        break;
+    }
+}
+void Snake::keyEvent2(int key) {
+    switch(key) {
+    case Qt::Key_W:
+        setHeading(UP);
+        break;
+    case Qt::Key_S:
+        setHeading(DOWN);
+        break;
+    case Qt::Key_A:
+        setHeading(LEFT);
+        break;
+    case Qt::Key_D:
+        setHeading(RIGHT);
+        break;
+    }
+}
 void Snake::grow() {
     QPoint tail = body.front();
     int dx, dy;

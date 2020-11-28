@@ -10,7 +10,7 @@
 #define FOOD_SIZE 4
 
 const QString FoodColors[] = {
-    "orange", "blue", "green", "purple"
+    "orange", "cyan", "green", "purple"
 };
 
 struct Food {
