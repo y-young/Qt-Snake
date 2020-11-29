@@ -5,7 +5,8 @@
 #include <QTimer>
 #include "snake.h"
 #include "foods.h"
-#define RENDERSPEED 40
+#include "constants.h"
+#define RENDERSPEED 40 // TODO
 
 namespace Ui {
 class Map;
@@ -19,12 +20,14 @@ public:
 protected:
     void paintEvent(QPaintEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 private:
     Ui::Map *ui;
     Snake *snake;
     Snake *snake1 = nullptr;
     Foods *foods;
     QTimer *timer;
+    int scale;
     void snakeMove();
     void checkEat();
 };

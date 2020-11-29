@@ -3,28 +3,20 @@
 
 #include <QWidget>
 #include <QVector>
-#include <QString>
 #include <QTime>
 #include <QRandomGenerator>
 #include <QtDebug>
-#define FOOD_SIZE 4
-
-const QString FoodColors[] = {
-    "orange", "cyan", "green", "purple"
-};
+#include "constants.h"
 
 struct Food {
     QColor color;
     QPoint pos;
-    Food() {
+    Food(QPoint p) {
         int c = QRandomGenerator::global()->bounded(0, 4);
-        int x = QRandomGenerator::global()->bounded(-36, 37);
-        int y = QRandomGenerator::global()->bounded(-20, 21);
         color = QColor(FoodColors[c]);
-        pos = QPoint(x*FOOD_SIZE,y*FOOD_SIZE);
-//        qDebug() << pos<<color;
+        pos = p;
     }
-    Food(QColor c, QPoint p) {
+    Food(QPoint p, QColor c) {
         color = c;
         pos = p;
     }
@@ -39,11 +31,14 @@ public:
     void draw(QPainter *painter);
     void generate(int num = 1);
     bool check(const QPoint& p);
+    void resize(int s);
     ~Foods();
 
 private:
     QVector<Food> list;
+    int scale;
     bool contains(QPoint p);
+    Food newFood();
 };
 
 #endif // FOODS_H

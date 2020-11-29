@@ -1,14 +1,32 @@
-QT += widgets
+QT       += core gui
 
-HEADERS       = \
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+CONFIG += c++11
+
+# You can make your code fail to compile if it uses deprecated APIs.
+# In order to do so, uncomment the following line.
+#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+
+SOURCES += \
+    foods.cpp \
+    main.cpp \
+    mainwindow.cpp \
+    map.cpp \
+    snake.cpp
+
+HEADERS += \
+    constants.h \
     foods.h \
+    mainwindow.h \
     map.h \
     snake.h
-SOURCES       = \
-                foods.cpp \
-                main.cpp \
-                map.cpp \
-                snake.cpp
 
 FORMS += \
+    mainwindow.ui \
     map.ui
+
+# Default rules for deployment.
+qnx: target.path = /tmp/$${TARGET}/bin
+else: unix:!android: target.path = /opt/$${TARGET}/bin
+!isEmpty(target.path): INSTALLS += target

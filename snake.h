@@ -54,14 +54,7 @@
 #include <QWidget>
 #include <QKeyEvent>
 #include <QVector>
-
-#define SPEED 4
-#define SIZE 4
-
-enum Heading {UP, DOWN, LEFT, RIGHT};
-const int direction[4][2] = {
-    {0,-SPEED}, {0,SPEED}, {-SPEED,0}, {SPEED,0}
-};
+#include "constants.h"
 
 class Snake : public QWidget
 {
@@ -75,6 +68,7 @@ public:
     void grow();
     void keyEvent1(int key);
     void keyEvent2(int key);
+    void resize(int s);
     QPoint head();
 protected:
 
@@ -82,6 +76,7 @@ private:
     QVector<QPoint> body;
     Heading heading;
     QColor color;
+    int scale;
 };
 
 #endif

@@ -8,6 +8,7 @@ Map::Map(QWidget *parent) :
     ui(new Ui::Map)
 {
     ui->setupUi(this);
+    this->setFocusPolicy(Qt::StrongFocus);
     snake = new Snake();
     snake1 = new Snake(nullptr, LEFT, "blue");
     foods = new Foods();
@@ -16,6 +17,7 @@ Map::Map(QWidget *parent) :
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&Map::checkEat));
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&Map::update));
     timer->start(RENDERSPEED);
+    resize(WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 
 void Map::snakeMove() {
@@ -36,21 +38,25 @@ void Map::checkEat() {
 }
 void Map::paintEvent(QPaintEvent *)
 {
-    int side = qMin(width(), height());
-
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.translate(width() / 2, height() / 2);
-    painter.scale(side / 200.0, side / 200.0);
+    painter.translate(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+    painter.scale(scale, scale);
 
     painter.setPen(Qt::NoPen);
+    painter.setBrush(QColor("red"));
     snake->draw(&painter);
     if(snake1 != nullptr) {
         snake1->draw(&painter);
     }
     foods->draw(&painter);
 }
-
+void Map::resizeEvent(QResizeEvent *) {
+    scale = qMin(width() / MAP_WIDTH, height() / MAP_HEIGHT);
+    snake->resize(scale);
+    foods->resize(scale);
+    qDebug() << width() << height() << scale;
+}
 void Map::keyPressEvent(QKeyEvent *event) {
     int key = event->key();
     switch(key) {

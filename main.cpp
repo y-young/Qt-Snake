@@ -51,11 +51,14 @@
 #include <QApplication>
 
 #include "map.h"
+#include "mainwindow.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     Map map;
     map.show();
+//    MainWindow mainWindow;
+//    mainWindow.show();
     return app.exec();
 }
