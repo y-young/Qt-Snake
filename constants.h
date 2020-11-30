@@ -5,10 +5,12 @@
 
 //snake
 #define SNAKE_SIZE 4
-#define SNAKE_SPEED 4
+#define SNAKE_SPEED 40
+#define SPEED_STEP 10
+
 enum Heading {UP, DOWN, LEFT, RIGHT};
 const int direction[4][2] = {
-    {0,-SNAKE_SPEED}, {0,SNAKE_SPEED},{-SNAKE_SPEED,0}, {SNAKE_SPEED,0}
+    {0,-SNAKE_SIZE}, {0,SNAKE_SIZE},{-SNAKE_SIZE,0}, {SNAKE_SIZE,0}
 };
 
 //map
@@ -16,6 +18,7 @@ const int direction[4][2] = {
 #define WINDOW_HEIGHT 640
 #define MAP_WIDTH 240
 #define MAP_HEIGHT 160
+#define RENDER_SPEED 30
 
 //foods
 #define FOOD_SIZE 4

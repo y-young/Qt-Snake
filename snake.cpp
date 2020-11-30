@@ -12,6 +12,17 @@ Snake::Snake(QWidget *parent, Heading h, QString c)
     }
     heading = h;
     color = QColor(c);
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, QOverload<>::of(&Snake::move));
+    timer->start(speed);
+}
+void Snake::slowDown() {
+    speed += SPEED_STEP;
+    timer->setInterval(speed);
+}
+void Snake::speedUp() {
+    speed -= SPEED_STEP;
+    timer->setInterval(speed);
 }
 void Snake::draw(QPainter *painter)
 {
@@ -33,6 +44,13 @@ void Snake::setHeading(Heading newHeading) {
         return;
     }
     heading = newHeading;
+//    move(); // Temporary solution to turning around
+}
+void Snake::pause() {
+    timer->stop();
+}
+void Snake::resume() {
+    timer->start(speed);
 }
 void Snake::keyEvent1(int key) {
     switch(key) {

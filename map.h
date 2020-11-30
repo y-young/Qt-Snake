@@ -6,7 +6,6 @@
 #include "snake.h"
 #include "foods.h"
 #include "constants.h"
-#define RENDERSPEED 40 // TODO
 
 namespace Ui {
 class Map;
@@ -30,6 +29,8 @@ private:
     int scale;
     void snakeMove();
     void checkEat();
+    void pause();
+    void resume();
 };
 
 #endif // MAP_H

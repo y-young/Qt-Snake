@@ -69,7 +69,11 @@ public:
     void keyEvent1(int key);
     void keyEvent2(int key);
     void resize(int s);
+    void slowDown();
+    void speedUp();
     QPoint head();
+    void pause();
+    void resume();
 protected:
 
 private:
@@ -77,6 +81,8 @@ private:
     Heading heading;
     QColor color;
     int scale;
+    QTimer *timer;
+    int speed = SNAKE_SPEED;
 };
 
 #endif

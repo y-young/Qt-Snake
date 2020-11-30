@@ -11,12 +11,13 @@ Map::Map(QWidget *parent) :
     this->setFocusPolicy(Qt::StrongFocus);
     snake = new Snake();
     snake1 = new Snake(nullptr, LEFT, "blue");
+//    snake1->slowDown();
     foods = new Foods();
     timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, QOverload<>::of(&Map::snakeMove));
+//    connect(timer, &QTimer::timeout, this, QOverload<>::of(&Map::snakeMove));
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&Map::checkEat));
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&Map::update));
-    timer->start(RENDERSPEED);
+    timer->start(RENDER_SPEED);
     resize(WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 
@@ -57,14 +58,28 @@ void Map::resizeEvent(QResizeEvent *) {
     foods->resize(scale);
     qDebug() << width() << height() << scale;
 }
+void Map::pause() {
+    snake->pause();
+    if(snake1 != nullptr) {
+        snake1->pause();
+    }
+    timer->stop();
+}
+void Map::resume() {
+    timer->start(RENDER_SPEED);
+    snake->resume();
+    if(snake1 != nullptr) {
+        snake1->resume();
+    }
+}
 void Map::keyPressEvent(QKeyEvent *event) {
     int key = event->key();
     switch(key) {
     case Qt::Key_P:
-        timer->stop();
+        pause();
         break;
     case Qt::Key_R:
-        timer->start(RENDERSPEED);
+        resume();
         break;
     default:
         snake->keyEvent1(key);
