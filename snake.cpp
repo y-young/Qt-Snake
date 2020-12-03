@@ -4,17 +4,23 @@
 #include <QTimer>
 #include <QtDebug>
 
-Snake::Snake(QWidget *parent, Heading h, QString c)
+Snake::Snake(QWidget *parent, Foods* f, Heading h, QString c)
     : QWidget(parent)
 {
-    for(int i = -direction[h][0]*SNAKE_SIZE; i != 0; i+=direction[h][0]) {
+    for(int i = -direction[h][0]*SNAKE_LENGTH; i != 0; i+=direction[h][0]) {
         body.push_back(QPoint(i,0));
     }
+    foods = f;
     heading = h;
     color = QColor(c);
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&Snake::move));
     timer->start(speed);
+}
+void Snake::checkEat() {
+    if(foods->check(head())) {
+        grow();
+    }
 }
 void Snake::slowDown() {
     speed += SPEED_STEP;
@@ -30,13 +36,13 @@ void Snake::draw(QPainter *painter)
     painter->setBrush(c);
     //draw head
     QPoint p = body.back();
-    painter->drawRect(p.rx(), p.ry(), SNAKE_SIZE, SNAKE_SIZE);
+    painter->drawRect(p.rx(), p.ry(), GRID_SIZE, GRID_SIZE);
     //draw body
     c.setAlpha(150);
     painter->setBrush(c);
     for(int i = body.size() - 2; i >= 0; --i) {
         QPoint p = body[i];
-        painter->drawRect(p.rx(), p.ry(), SNAKE_SIZE, SNAKE_SIZE);
+        painter->drawRect(p.rx(), p.ry(), GRID_SIZE, GRID_SIZE);
     }
 }
 void Snake::setHeading(Heading newHeading) {
@@ -126,6 +132,16 @@ void Snake::move() {
     head.setX(x);
     head.setY(y);
     body.push_back(head);
+    checkHitSelf();
+    checkEat();
+}
+void Snake::checkHitSelf() {
+    QPoint p = head();
+    for(int i = body.size() - 2; i >= 0; --i) {
+        if(p == body[i]) {
+            emit hitSelf();
+        }
+    }
 }
 QPoint Snake::head() {
     return body.back();

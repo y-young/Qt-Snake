@@ -1,39 +1,23 @@
 #include "map.h"
 #include "ui_map.h"
 #include <QPainter>
+#include <QMessageBox>
 #include <QtDebug>
 
 Map::Map(QWidget *parent) :
     QWidget(parent)
 {
     this->setFocusPolicy(Qt::StrongFocus);
-    snake = new Snake();
-    snake1 = new Snake(nullptr, LEFT, "blue");
 //    snake1->slowDown();
     foods = new Foods();
     timer = new QTimer(this);
-//    connect(timer, &QTimer::timeout, this, QOverload<>::of(&Map::snakeMove));
-    connect(timer, &QTimer::timeout, this, QOverload<>::of(&Map::checkEat));
+    snake = new Snake(nullptr, foods);
+    snake1 = new Snake(nullptr, foods, LEFT, "blue");
+    connect(snake, &Snake::hitSelf, this, QOverload<>::of(&Map::gameOver));
+    connect(snake1, &Snake::hitSelf, this, QOverload<>::of(&Map::gameOver));
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&Map::update));
     timer->start(RENDER_SPEED);
     resize(WINDOW_WIDTH, WINDOW_HEIGHT);
-}
-
-void Map::snakeMove() {
-    snake->move();
-    if(snake1 != nullptr) {
-        snake1->move();
-    }
-}
-void Map::checkEat() {
-    if(foods->check(snake->head())) {
-        snake->grow();
-    }
-    if(snake1 != nullptr) {
-        if(foods->check(snake1->head())) {
-            snake1->grow();
-        }
-    }
 }
 void Map::paintEvent(QPaintEvent *)
 {
@@ -86,7 +70,13 @@ void Map::keyPressEvent(QKeyEvent *event) {
         }
     }
 }
-
+void Map::gameOver() {
+    pause();
+    QMessageBox msgBox;
+    msgBox.setText("Game over!");
+    msgBox.exec();
+    QApplication::exit(0);
+}
 Map::~Map()
 {
     delete snake;

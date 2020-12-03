@@ -3,14 +3,16 @@
 
 #include <QString>
 
+#define GRID_SIZE 4
+
 //snake
-#define SNAKE_SIZE 4
+#define SNAKE_LENGTH 4
 #define SNAKE_SPEED 40
 #define SPEED_STEP 10
 
 enum Heading {UP, DOWN, LEFT, RIGHT};
 const int direction[4][2] = {
-    {0,-SNAKE_SIZE}, {0,SNAKE_SIZE},{-SNAKE_SIZE,0}, {SNAKE_SIZE,0}
+    {0,-GRID_SIZE}, {0,GRID_SIZE},{-GRID_SIZE,0}, {GRID_SIZE,0}
 };
 
 //map

@@ -30,6 +30,9 @@ private:
     void checkEat();
     void pause();
     void resume();
+
+public slots:
+    void gameOver();
 };
 
 #endif // MAP_H

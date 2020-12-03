@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QKeyEvent>
 #include <QVector>
+#include "foods.h"
 #include "constants.h"
 
 class Snake : public QWidget
@@ -11,7 +12,7 @@ class Snake : public QWidget
     Q_OBJECT
 
 public:
-    Snake(QWidget *parent = nullptr, Heading h=RIGHT, QString c="red");
+    Snake(QWidget *parent = nullptr, Foods* f = nullptr, Heading h=RIGHT, QString c="red");
     void move();
     void draw(QPainter *painter);
     void setHeading(Heading newHeading);
@@ -28,11 +29,17 @@ protected:
 
 private:
     QVector<QPoint> body;
+    Foods* foods;
     Heading heading;
     QColor color;
     int scale;
     QTimer *timer;
     int speed = SNAKE_SPEED;
+    void checkHitSelf();
+    void checkEat();
+
+signals:
+    void hitSelf();
 };
 
 #endif // SNAKE_H
