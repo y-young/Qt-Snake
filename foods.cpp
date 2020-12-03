@@ -15,7 +15,7 @@ void Foods::draw(QPainter *painter)
     for(int i = 0; i < list.size(); ++i) {
         QPoint p = list[i].pos;
         QImage img(":/foods/" + list[i].type);
-        painter->drawImage(QRectF(p.rx()-FOOD_OFFSET, p.ry()-FOOD_OFFSET, FOOD_SIZE, FOOD_SIZE), img);
+        painter->drawImage(QRectF(p.rx()-FOOD_RENDER_OFFSET, p.ry()-FOOD_RENDER_OFFSET, FOOD_RENDER_SIZE, FOOD_RENDER_SIZE), img);
     }
 }
 Food Foods::newFood() {
@@ -30,15 +30,16 @@ void Foods::generate(int num) {
         list.push_back(newFood());
     }
 }
-bool Foods::check(const QPoint& p) {
+Effect Foods::check(const QPoint& p) {
     for(int i = 0; i < list.size(); ++i) {
         if(list[i].pos == p) {
+            Food food = list[i];
             list.remove(i);
             generate();
-            return true;
+            return food.effect;
         }
     }
-    return false;
+    return NONE;
 }
 bool Foods::contains(QPoint p) {
     for(int i = 0; i < list.size(); ++i) {

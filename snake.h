@@ -34,10 +34,13 @@ private:
     QColor color;
     int scale;
     QTimer *timer;
+    int undefeatableTime = 0;
     int speed = SNAKE_SPEED;
     bool processing = false;
     void checkHitSelf();
     void checkEat();
+    void increaseUndefeatable();
+    void decreaseUndefeatable();
 
 signals:
     void hitSelf();

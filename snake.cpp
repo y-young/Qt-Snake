@@ -15,19 +15,38 @@ Snake::Snake(QWidget *parent, Foods* f, Heading h, QString c)
     color = QColor(c);
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&Snake::move));
+    connect(timer, &QTimer::timeout, this, QOverload<>::of(&Snake::decreaseUndefeatable));
     timer->start(speed);
 }
 void Snake::checkEat() {
-    if(foods->check(head())) {
+    Effect effect = foods->check(head());
+    switch (effect) {
+    case GROW:
         grow();
+        break;
+    case SPEED_UP:
+        speedUp();
+        break;
+    case SLOW_DOWN:
+        slowDown();
+        break;
+    case UNDEFEATABLE:
+        increaseUndefeatable();
+        break;
+    default:
+        break;
     }
 }
 void Snake::slowDown() {
-    speed += SPEED_STEP;
+    int newSpeed = speed + SPEED_STEP;
+    undefeatableTime = undefeatableTime * speed / newSpeed;
+    speed = newSpeed;
     timer->setInterval(speed);
 }
 void Snake::speedUp() {
-    speed -= SPEED_STEP;
+    int newSpeed = speed - SPEED_STEP;
+    undefeatableTime = undefeatableTime * speed / newSpeed;
+    speed = newSpeed;
     timer->setInterval(speed);
 }
 void Snake::draw(QPainter *painter)
@@ -141,11 +160,22 @@ void Snake::move() {
     checkEat();
 }
 void Snake::checkHitSelf() {
+    if(undefeatableTime > 0) {
+        return;
+    }
     QPoint p = head();
     for(int i = body.size() - 2; i >= 0; --i) {
         if(p == body[i]) {
             emit hitSelf();
         }
+    }
+}
+void Snake::increaseUndefeatable() {
+    undefeatableTime += 3000 / speed;
+}
+void Snake::decreaseUndefeatable() {
+    if(undefeatableTime > 0) {
+        undefeatableTime -= 1;
     }
 }
 QPoint Snake::head() {

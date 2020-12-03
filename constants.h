@@ -23,15 +23,21 @@ const int direction[4][2] = {
 #define RENDER_SPEED 30
 
 //foods
-#define FOOD_SIZE 7
-#define FOOD_OFFSET 1.5
-const QString FoodColors[] = {
-    "orange", "cyan", "green", "purple"
-};
+#define FOOD_SIZE 4
+#define FOOD_RENDER_SIZE 7
+#define FOOD_RENDER_OFFSET 1.5
+enum Effect {NONE, GROW, EXTEND, DIE, SPEED_UP, SLOW_DOWN, UNDEFEATABLE};
 const QString FoodTypes[] = {
     "apple", "grape", "peach", "pear",
     "rocket", "snail",
-    "bomb", "heart"
+    "heart", "bomb",
+    "shield"
+};
+const Effect FoodEffects[] = {
+    GROW, GROW, GROW, GROW,
+    SPEED_UP, SLOW_DOWN,
+    EXTEND, DIE,
+    UNDEFEATABLE
 };
 
 #endif // CONSTANTS_H

@@ -11,13 +11,11 @@
 struct Food {
     QString type;
     QPoint pos;
+    Effect effect;
     Food(QPoint p) {
-        int t = QRandomGenerator::global()->bounded(0, 8);
+        int t = QRandomGenerator::global()->bounded(0, 9);
         type = FoodTypes[t];
-        pos = p;
-    }
-    Food(QPoint p, QString t) {
-        type = t;
+        effect = FoodEffects[t];
         pos = p;
     }
 };
@@ -30,7 +28,7 @@ public:
     explicit Foods(QWidget *parent = nullptr);
     void draw(QPainter *painter);
     void generate(int num = 1);
-    bool check(const QPoint& p);
+    Effect check(const QPoint& p);
     void resize(int s);
     ~Foods();
 
