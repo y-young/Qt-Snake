@@ -23,8 +23,7 @@ HEADERS += \
     snake.h
 
 FORMS += \
-    mainwindow.ui \
-    map.ui
+    mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

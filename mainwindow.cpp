@@ -2,9 +2,9 @@
 #include "ui_mainwindow.h"
 #include "map.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 //    this->setFocusPolicy(Qt::StrongFocus);
@@ -23,3 +23,4 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+

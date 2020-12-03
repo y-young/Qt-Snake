@@ -21,7 +21,6 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
 private:
-    Ui::Map *ui;
     Snake *snake;
     Snake *snake1 = nullptr;
     Foods *foods;

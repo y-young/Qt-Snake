@@ -4,10 +4,8 @@
 #include <QtDebug>
 
 Map::Map(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::Map)
+    QWidget(parent)
 {
-    ui->setupUi(this);
     this->setFocusPolicy(Qt::StrongFocus);
     snake = new Snake();
     snake1 = new Snake(nullptr, LEFT, "blue");
@@ -96,5 +94,4 @@ Map::~Map()
         delete snake1;
     }
     delete foods;
-    delete ui;
 }
