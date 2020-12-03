@@ -35,6 +35,7 @@ private:
     int scale;
     QTimer *timer;
     int speed = SNAKE_SPEED;
+    bool processing = false;
     void checkHitSelf();
     void checkEat();
 

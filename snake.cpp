@@ -49,7 +49,11 @@ void Snake::setHeading(Heading newHeading) {
     if(direction[heading][0] + direction[newHeading][0] == 0  || direction[heading][1] + direction[newHeading][1] == 0) {
         return;
     }
+    if(processing) {
+        return;
+    }
     heading = newHeading;
+    processing = true;
 //    move(); // Temporary solution to turning around
 }
 void Snake::pause() {
@@ -110,6 +114,7 @@ void Snake::resize(int s) {
     scale = s;
 }
 void Snake::move() {
+    processing = false;
     QPoint head = body.back();
     body.pop_front();
     int x = head.rx() + direction[heading][0];
