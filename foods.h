@@ -9,15 +9,15 @@
 #include "constants.h"
 
 struct Food {
-    QColor color;
+    QString type;
     QPoint pos;
     Food(QPoint p) {
-        int c = QRandomGenerator::global()->bounded(0, 4);
-        color = QColor(FoodColors[c]);
+        int t = QRandomGenerator::global()->bounded(0, 8);
+        type = FoodTypes[t];
         pos = p;
     }
-    Food(QPoint p, QColor c) {
-        color = c;
+    Food(QPoint p, QString t) {
+        type = t;
         pos = p;
     }
 };

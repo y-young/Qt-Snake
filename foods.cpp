@@ -1,5 +1,6 @@
 #include "foods.h"
 #include <QPainter>
+#include <QImage>
 
 Foods::Foods(QWidget *parent) :
     QWidget(parent)
@@ -12,9 +13,9 @@ void Foods::resize(int s) {
 void Foods::draw(QPainter *painter)
 {
     for(int i = 0; i < list.size(); ++i) {
-        painter->setBrush(list[i].color);
         QPoint p = list[i].pos;
-        painter->drawRect(p.rx(), p.ry(), FOOD_SIZE, FOOD_SIZE);
+        QImage img(":/foods/" + list[i].type);
+        painter->drawImage(QRectF(p.rx()-FOOD_OFFSET, p.ry()-FOOD_OFFSET, FOOD_SIZE, FOOD_SIZE), img);
     }
 }
 Food Foods::newFood() {

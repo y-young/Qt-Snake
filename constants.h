@@ -23,9 +23,15 @@ const int direction[4][2] = {
 #define RENDER_SPEED 30
 
 //foods
-#define FOOD_SIZE 4
+#define FOOD_SIZE 7
+#define FOOD_OFFSET 1.5
 const QString FoodColors[] = {
     "orange", "cyan", "green", "purple"
+};
+const QString FoodTypes[] = {
+    "apple", "grape", "peach", "pear",
+    "rocket", "snail",
+    "bomb", "heart"
 };
 
 #endif // CONSTANTS_H

@@ -8,6 +8,7 @@ Map::Map(QWidget *parent) :
     QWidget(parent)
 {
     this->setFocusPolicy(Qt::StrongFocus);
+    this->setStyleSheet("background-color: white");
 //    snake1->slowDown();
     foods = new Foods();
     timer = new QTimer(this);
