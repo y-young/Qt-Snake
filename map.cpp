@@ -13,7 +13,7 @@ Map::Map(QWidget *parent) :
     walls = new Walls();
     timer = new QTimer(this);
     snake = new Snake(nullptr, foods);
-    snake1 = new Snake(nullptr, foods, LEFT, "blue");
+    snake1 = new Snake(nullptr, foods);
     connect(snake, &Snake::hitSelf, this, QOverload<>::of(&Map::gameOver));
     connect(snake1, &Snake::hitSelf, this, QOverload<>::of(&Map::gameOver));
     connect(walls, &Walls::hitWall, this, QOverload<>::of(&Map::gameOver));

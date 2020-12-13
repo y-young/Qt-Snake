@@ -12,7 +12,8 @@ class Snake : public QWidget
     Q_OBJECT
 
 public:
-    Snake(QWidget *parent = nullptr, Foods* f = nullptr, Heading h=RIGHT, QString c="red");
+    const int id;
+    Snake(QWidget *parent = nullptr, Foods* f = nullptr);
     void move();
     void draw(QPainter *painter);
     void setHeading(Heading newHeading);
@@ -28,6 +29,7 @@ public:
 protected:
 
 private:
+    static int _id;
     QVector<QPoint> body;
     Foods* foods;
     Heading heading;

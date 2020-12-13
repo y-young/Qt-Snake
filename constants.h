@@ -14,6 +14,8 @@ enum Heading {UP, DOWN, LEFT, RIGHT};
 const int direction[4][2] = {
     {0,-GRID_SIZE}, {0,GRID_SIZE},{-GRID_SIZE,0}, {GRID_SIZE,0}
 };
+const QString SNAKE_COLORS[] = {"red", "blue", "green"};
+const Heading SNAKE_HEADINGS[] = {RIGHT, LEFT, UP};
 
 //map
 #define WINDOW_WIDTH 960

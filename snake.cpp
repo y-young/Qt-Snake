@@ -4,15 +4,18 @@
 #include <QTimer>
 #include <QtDebug>
 
-Snake::Snake(QWidget *parent, Foods* f, Heading h, QString c)
-    : QWidget(parent)
+int Snake::_id = 0;
+
+Snake::Snake(QWidget *parent, Foods* f)
+    : QWidget(parent), id(_id)
 {
-    for(int i = -direction[h][0]*SNAKE_LENGTH; i != 0; i+=direction[h][0]) {
+    ++_id;
+    foods = f;
+    heading = SNAKE_HEADINGS[id];
+    color = SNAKE_COLORS[id];
+    for(int i = -direction[heading][0]*SNAKE_LENGTH; i != 0; i+=direction[heading][0]) {
         body.push_back(QPoint(i,0));
     }
-    foods = f;
-    heading = h;
-    color = QColor(c);
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&Snake::move));
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&Snake::decreaseUndefeatable));
