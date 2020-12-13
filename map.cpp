@@ -9,31 +9,34 @@ Map::Map(QWidget *parent) :
 {
     this->setFocusPolicy(Qt::StrongFocus);
     this->setStyleSheet("background-color: white");
-//    snake1->slowDown();
     foods = new Foods();
+    walls = new Walls();
     timer = new QTimer(this);
     snake = new Snake(nullptr, foods);
     snake1 = new Snake(nullptr, foods, LEFT, "blue");
     connect(snake, &Snake::hitSelf, this, QOverload<>::of(&Map::gameOver));
     connect(snake1, &Snake::hitSelf, this, QOverload<>::of(&Map::gameOver));
+    connect(walls, &Walls::hitWall, this, QOverload<>::of(&Map::gameOver));
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&Map::update));
     timer->start(RENDER_SPEED);
     resize(WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 void Map::paintEvent(QPaintEvent *)
 {
+    walls->checkHit(snake);
+    walls->checkHit(snake1);
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.translate(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
     painter.scale(scale, scale);
 
     painter.setPen(Qt::NoPen);
-    painter.setBrush(QColor("red"));
     snake->draw(&painter);
     if(snake1 != nullptr) {
         snake1->draw(&painter);
     }
     foods->draw(&painter);
+    walls->draw(&painter);
 }
 void Map::resizeEvent(QResizeEvent *) {
     scale = qMin(width() / MAP_WIDTH, height() / MAP_HEIGHT);

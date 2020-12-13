@@ -13,14 +13,16 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     map.cpp \
-    snake.cpp
+    snake.cpp \
+    walls.cpp
 
 HEADERS += \
     constants.h \
     foods.h \
     mainwindow.h \
     map.h \
-    snake.h
+    snake.h \
+    walls.h
 
 FORMS += \
     mainwindow.ui

@@ -163,11 +163,8 @@ void Snake::checkHitSelf() {
     if(undefeatableTime > 0) {
         return;
     }
-    QPoint p = head();
-    for(int i = body.size() - 2; i >= 0; --i) {
-        if(p == body[i]) {
-            emit hitSelf();
-        }
+    if(body.indexOf(head()) != body.size() - 1) {
+        emit hitSelf();
     }
 }
 void Snake::increaseUndefeatable() {

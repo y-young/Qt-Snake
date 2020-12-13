@@ -5,6 +5,7 @@
 #include <QTimer>
 #include "snake.h"
 #include "foods.h"
+#include "walls.h"
 #include "constants.h"
 
 namespace Ui {
@@ -24,6 +25,7 @@ private:
     Snake *snake;
     Snake *snake1 = nullptr;
     Foods *foods;
+    Walls *walls;
     QTimer *timer;
     int scale;
     void snakeMove();

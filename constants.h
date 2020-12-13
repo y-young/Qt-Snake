@@ -40,4 +40,7 @@ const Effect FoodEffects[] = {
     UNDEFEATABLE
 };
 
+//walls
+const QString WALL_COLOR = "#e9e8e8";
+
 #endif // CONSTANTS_H
