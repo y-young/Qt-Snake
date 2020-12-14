@@ -6,9 +6,9 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    Map map;
-    map.show();
-//    MainWindow w;
-//    w.show();
+//    Map map;
+//    map.show();
+    MainWindow w;
+    w.show();
     return a.exec();
 }

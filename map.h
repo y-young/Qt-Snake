@@ -16,6 +16,8 @@ class Map : public QWidget
     Q_OBJECT
 public:
     explicit Map(QWidget *parent = nullptr);
+    void pause();
+    void resume();
     ~Map();
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -30,8 +32,6 @@ private:
     int scale;
     void snakeMove();
     void checkEat();
-    void pause();
-    void resume();
 
 public slots:
     void gameOver();

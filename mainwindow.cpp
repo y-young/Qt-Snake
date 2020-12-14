@@ -3,13 +3,15 @@
 #include "map.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
+    : QWidget(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-//    this->setFocusPolicy(Qt::StrongFocus);
-    Map *map = new Map(this);
-    setCentralWidget(map);
+    map = new Map();
+    map->hide();
+    map->pause();
+    connect(ui->StartButton, &QPushButton::released, this, QOverload<>::of(&MainWindow::newGame));
+    connect(ui->QuitButton, &QPushButton::released, this, QOverload<>::of(&MainWindow::quit));
 }
 void MainWindow::keyPressEvent(QKeyEvent* event)
 {
@@ -19,8 +21,18 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
 //    }
 //    QWidget::keyPressEvent(event);
 }
+void MainWindow::newGame() {
+    this->hide();
+    map->show();
+    map->resume();
+//    this->setFocusPolicy(Qt::StrongFocus);
+}
+void MainWindow::quit() {
+    this->close();
+}
 MainWindow::~MainWindow()
 {
+    delete map;
     delete ui;
 }
 

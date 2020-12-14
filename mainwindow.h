@@ -1,13 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include <QWidget>
+#include "map.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class MainWindow : public QWidget
 {
     Q_OBJECT
 
@@ -17,8 +18,13 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    Map* map;
 
 protected:
     void keyPressEvent(QKeyEvent * event);
+
+public slots:
+    void newGame();
+    void quit();
 };
 #endif // MAINWINDOW_H
