@@ -71,12 +71,7 @@ void Snake::setHeading(Heading newHeading) {
     if(direction[heading][0] + direction[newHeading][0] == 0  || direction[heading][1] + direction[newHeading][1] == 0) {
         return;
     }
-    if(processing) {
-        return;
-    }
     heading = newHeading;
-    processing = true;
-//    move(); // Temporary solution to turning around
 }
 void Snake::pause() {
     timer->stop();
@@ -84,35 +79,64 @@ void Snake::pause() {
 void Snake::resume() {
     timer->start(speed);
 }
+void Snake::keyEvent(int key) {
+    switch (id) {
+    case 0:
+        keyEvent1(key);
+        break;
+    case 1:
+        keyEvent2(key);
+        break;
+    case 2:
+        keyEvent3(key);
+        break;
+    }
+}
 void Snake::keyEvent1(int key) {
     switch(key) {
     case Qt::Key_Up:
-        setHeading(UP);
+        userInputs.push(UP);
         break;
     case Qt::Key_Down:
-        setHeading(DOWN);
+        userInputs.push(DOWN);
         break;
     case Qt::Key_Left:
-        setHeading(LEFT);
+        userInputs.push(LEFT);
         break;
     case Qt::Key_Right:
-        setHeading(RIGHT);
+        userInputs.push(RIGHT);
         break;
     }
 }
 void Snake::keyEvent2(int key) {
     switch(key) {
     case Qt::Key_W:
-        setHeading(UP);
+        userInputs.push(UP);
         break;
     case Qt::Key_S:
-        setHeading(DOWN);
+        userInputs.push(DOWN);
         break;
     case Qt::Key_A:
-        setHeading(LEFT);
+        userInputs.push(LEFT);
         break;
     case Qt::Key_D:
-        setHeading(RIGHT);
+        userInputs.push(RIGHT);
+        break;
+    }
+}
+void Snake::keyEvent3(int key) {
+    switch(key) {
+    case Qt::Key_I:
+        userInputs.push(UP);
+        break;
+    case Qt::Key_K:
+        userInputs.push(DOWN);
+        break;
+    case Qt::Key_J:
+        userInputs.push(LEFT);
+        break;
+    case Qt::Key_L:
+        userInputs.push(RIGHT);
         break;
     }
 }
@@ -123,7 +147,6 @@ void Snake::grow() {
         QPoint beforeTail = body.at(1);
         dx = tail.rx() - beforeTail.rx();
         dy = tail.ry() - beforeTail.ry();
-
     } else {
         dx = direction[heading][0];
         dy = direction[heading][1];
@@ -135,8 +158,16 @@ void Snake::grow() {
 void Snake::resize(int s) {
     scale = s;
 }
+void Snake::handleUserInput() {
+    if(userInputs.empty()) {
+        return;
+    }
+    Heading newHeading = userInputs.front();
+    userInputs.pop();
+    setHeading(newHeading);
+}
 void Snake::move() {
-    processing = false;
+    handleUserInput();
     QPoint head = body.back();
     body.pop_front();
     int x = head.rx() + direction[heading][0];

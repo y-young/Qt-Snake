@@ -68,9 +68,9 @@ void Map::keyPressEvent(QKeyEvent *event) {
         resume();
         break;
     default:
-        snake->keyEvent1(key);
+        snake->keyEvent(key);
         if(snake1 != nullptr) {
-            snake1->keyEvent2(key);
+            snake1->keyEvent(key);
         }
     }
 }
