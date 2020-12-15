@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QWidget>
+#include "settingsdialog.h"
 #include "map.h"
 
 QT_BEGIN_NAMESPACE
@@ -19,6 +20,7 @@ public:
 private:
     Ui::MainWindow *ui;
     Map* map;
+    SettingsDialog *settingsDialog;
 
 protected:
     void keyPressEvent(QKeyEvent * event);

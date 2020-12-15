@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QTimer>
+#include <QVector>
 #include "snake.h"
 #include "foods.h"
 #include "walls.h"
@@ -16,6 +17,7 @@ class Map : public QWidget
     Q_OBJECT
 public:
     explicit Map(QWidget *parent = nullptr);
+    void init();
     void pause();
     void resume();
     ~Map();
@@ -23,17 +25,26 @@ protected:
     void paintEvent(QPaintEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
+    void showEvent(QShowEvent *) override;
 private:
-    Snake *snake;
-    Snake *snake1 = nullptr;
+    QVector<Snake*> players;
     Foods *foods;
     Walls *walls;
     QTimer *timer;
     int scale;
+    int playerNum = 1;
+    enum {NONE, SURROUNDING} wallType = NONE;
     void snakeMove();
     void checkEat();
+    void initWalls();
+    void initPlayers();
 
 public slots:
+    void noWalls();
+    void surroundingWalls();
+    void singlePlayer();
+    void doublePlayers();
+    void triplePlayers();
     void gameOver();
 };
 

@@ -5,7 +5,6 @@
 Walls::Walls(QWidget *parent) :
     QWidget(parent)
 {
-    generateSurroundingWalls();
 }
 void Walls::draw(QPainter *painter)
 {

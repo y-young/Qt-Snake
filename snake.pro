@@ -13,6 +13,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     map.cpp \
+    settingsdialog.cpp \
     snake.cpp \
     walls.cpp
 
@@ -21,11 +22,13 @@ HEADERS += \
     foods.h \
     mainwindow.h \
     map.h \
+    settingsdialog.h \
     snake.h \
     walls.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    settingsdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

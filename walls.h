@@ -12,13 +12,13 @@ class Walls : public QWidget
 
 public:
     explicit Walls(QWidget *parent = nullptr);
+    void generateSurroundingWalls();
     void draw(QPainter *painter);
     void checkHit(Snake* snake);
     ~Walls();
 
 private:
     QVector<QPoint> list;
-    void generateSurroundingWalls();
 
 signals:
     void hitWall();
