@@ -30,16 +30,16 @@ void Foods::generate(int num) {
         list.push_back(newFood());
     }
 }
-Effect Foods::check(const QPoint& p) {
+void Foods::checkEat(int snakeId, const QPoint& snakeHead) {
     for(int i = 0; i < list.size(); ++i) {
-        if(list[i].pos == p) {
+        if(list[i].pos == snakeHead) {
             Food food = list[i];
             list.remove(i);
             generate();
-            return food.effect;
+            emit foodEaten(snakeId, food.effect);
+            return;
         }
     }
-    return NONE;
 }
 bool Foods::contains(QPoint p) {
     for(int i = 0; i < list.size(); ++i) {

@@ -6,11 +6,10 @@
 
 int Snake::_id = 0;
 
-Snake::Snake(QWidget *parent, Foods* f)
-    : QWidget(parent), id(_id)
+Snake::Snake(QWidget *parent)
+    : QWidget(parent), id(_id), lives(1)
 {
     ++_id;
-    foods = f;
     heading = SNAKE_HEADINGS[id];
     color = SNAKE_COLORS[id];
     for(int i = -direction[heading][0]*SNAKE_LENGTH; i != 0; i+=direction[heading][0]) {
@@ -21,8 +20,10 @@ Snake::Snake(QWidget *parent, Foods* f)
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&Snake::decreaseUndefeatable));
     timer->start(speed);
 }
-void Snake::checkEat() {
-    Effect effect = foods->check(head());
+void Snake::applyEffect(int snakeId, Effect effect) {
+    if(snakeId != id) {
+        return;
+    }
     switch (effect) {
     case GROW:
         grow();
@@ -35,6 +36,9 @@ void Snake::checkEat() {
         break;
     case UNDEFEATABLE:
         increaseUndefeatable();
+        break;
+    case EXTEND:
+        ++lives;
         break;
     default:
         break;
@@ -191,14 +195,11 @@ void Snake::move() {
     head.setY(y);
     body.push_back(head);
     checkHitSelf();
-    checkEat();
+    emit snakeMoved(id, head);
 }
 void Snake::checkHitSelf() {
-    if(undefeatableTime > 0) {
-        return;
-    }
     if(body.indexOf(head()) != body.size() - 1) {
-        emit hitSelf();
+        die(id);
     }
 }
 void Snake::increaseUndefeatable() {
@@ -211,4 +212,17 @@ void Snake::decreaseUndefeatable() {
 }
 QPoint Snake::head() {
     return body.back();
+}
+void Snake::die(int snakeId) {
+    if(snakeId != id) {
+        return;
+    }
+    if(undefeatableTime > 0) {
+        return;
+    }
+    --lives;
+    emit died(id, lives);
+    if(lives > 0) {
+        increaseUndefeatable();
+    }
 }

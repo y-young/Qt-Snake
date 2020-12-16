@@ -37,6 +37,12 @@ private:
     int scale;
     bool contains(QPoint p);
     Food newFood();
+
+signals:
+    void foodEaten(int snakeId, Effect effect);
+
+public slots:
+    void checkEat(int id, const QPoint& head);
 };
 
 #endif // FOODS_H

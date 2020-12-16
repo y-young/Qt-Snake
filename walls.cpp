@@ -34,10 +34,9 @@ void Walls::generateSurroundingWalls() {
         list.push_back(QPoint(maxX - GRID_SIZE, y));
     }
 }
-void Walls::checkHit(Snake* snake) {
-    QPoint head = snake->head();
+void Walls::checkHit(int snakeId, const QPoint& head) {
     if(list.contains(head)) {
-        emit hitWall();
+        emit hitWall(snakeId);
     }
 }
 Walls::~Walls()

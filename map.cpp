@@ -17,9 +17,6 @@ Map::Map(QWidget *parent) :
 }
 void Map::paintEvent(QPaintEvent *)
 {
-    for(int i = 0; i < players.size(); ++i) {
-        walls->checkHit(players[i]);
-    }
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.translate(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
@@ -77,14 +74,17 @@ void Map::initWalls() {
     if(wallType == SURROUNDING) {
         walls->generateSurroundingWalls();
     }
-    connect(walls, &Walls::hitWall, this, QOverload<>::of(&Map::gameOver));
 }
 void Map::initPlayers() {
     qDebug() << playerNum;
     for(int i = 1; i <= playerNum; ++i) {
-        Snake* player = new Snake(this, foods);
+        Snake* player = new Snake(this);
         players.push_back(player);
-        connect(player, &Snake::hitSelf, this, QOverload<>::of(&Map::gameOver));
+        connect(player, &Snake::snakeMoved, foods, &Foods::checkEat);
+        connect(player, &Snake::snakeMoved, walls, &Walls::checkHit);
+        connect(foods, &Foods::foodEaten, player, &Snake::applyEffect);
+        connect(walls, &Walls::hitWall, player, &Snake::die);
+        connect(player, &Snake::died, this, &Map::snakeDied);
     }
 }
 void Map::noWalls() {
@@ -102,12 +102,18 @@ void Map::doublePlayers() {
 void Map::triplePlayers() {
     playerNum = 3;
 }
-void Map::gameOver() {
+void Map::snakeDied(int id, int lives) {
     pause();
     QMessageBox msgBox;
-    msgBox.setText("Game over!");
-    msgBox.exec();
-    QApplication::exit(0);
+    if(lives == 0) {
+        msgBox.setText("Game over!");
+        msgBox.exec();
+        QApplication::exit(0);
+    } else {
+        msgBox.setText("Player " + QString::number(id) + " died, " + QString::number(lives) + " live(s) remained.");
+        msgBox.exec();
+        resume();
+    }
 }
 Map::~Map()
 {

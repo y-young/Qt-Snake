@@ -5,7 +5,6 @@
 #include <QKeyEvent>
 #include <QVector>
 #include <queue>
-#include "foods.h"
 #include "constants.h"
 
 class Snake : public QWidget
@@ -14,7 +13,7 @@ class Snake : public QWidget
 
 public:
     const int id;
-    Snake(QWidget *parent = nullptr, Foods* f = nullptr);
+    Snake(QWidget *parent = nullptr);
     void draw(QPainter *painter);
     void grow();
     void keyEvent(int key);
@@ -29,12 +28,12 @@ protected:
 private:
     static int _id;
     QVector<QPoint> body;
-    Foods* foods;
     Heading heading;
     QColor color;
     int scale;
     QTimer *timer;
     int undefeatableTime = 0;
+    int lives;
     int speed = SNAKE_SPEED;
     std::queue<Heading> userInputs;
     void keyEvent1(int key);
@@ -49,7 +48,13 @@ private:
     void decreaseUndefeatable();
 
 signals:
-    void hitSelf();
+    void snakeMoved(int id, QPoint &head);
+    void gameOver();
+    void died(int id, int lives);
+
+public slots:
+    void applyEffect(int snakeId, Effect effect);
+    void die(int snakeId);
 };
 
 #endif // SNAKE_H

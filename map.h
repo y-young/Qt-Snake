@@ -45,7 +45,7 @@ public slots:
     void singlePlayer();
     void doublePlayers();
     void triplePlayers();
-    void gameOver();
+    void snakeDied(int id, int lives);
 };
 
 #endif // MAP_H
