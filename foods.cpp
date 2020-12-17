@@ -14,7 +14,7 @@ void Foods::draw(QPainter *painter)
 {
     for(int i = 0; i < list.size(); ++i) {
         QPoint p = list[i].pos;
-        QImage img(":/foods/" + list[i].type);
+        QImage img(":/foods/" + list[i].name);
         painter->drawImage(QRectF(p.rx()-FOOD_RENDER_OFFSET, p.ry()-FOOD_RENDER_OFFSET, FOOD_RENDER_SIZE, FOOD_RENDER_SIZE), img);
     }
 }
@@ -63,10 +63,10 @@ void Foods::checkEat(int snakeId, const QPoint& snakeHead) {
         if(list[i].pos == snakeHead) {
             Food food = list[i];
             list.remove(i);
-            if(food.type == "rocket") {
+            if(food.name == "rocket") {
                 --rockets;
             }
-            if(food.type == "snail") {
+            if(food.name == "snail") {
                 --snails;
             }
             generate();
@@ -86,4 +86,24 @@ bool Foods::contains(QPoint p) {
 Foods::~Foods()
 {
 
+}
+QDataStream& operator<<(QDataStream& out, const Food& food) {
+    out<<food.type<<food.pos;
+    return out;
+}
+QDataStream& operator<<(QDataStream& out, const Foods& foods) {
+    out<<foods.list<<foods.rockets<<foods.snails;
+    return out;
+}
+QDataStream& operator>>(QDataStream& in, Food& food) {
+    in>>food.type;
+    in>>food.pos;
+    food.name = FoodTypes[food.type];
+    food.effect = FoodEffects[food.type];
+    return in;
+}
+QDataStream& operator>>(QDataStream& in, Foods& foods) {
+    in>>foods.list;
+    in>>foods.rockets>>foods.snails;
+    return in;
 }

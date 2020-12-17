@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QFileDialog>
+
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::MainWindow)
@@ -8,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     settingsDialog = new SettingsDialog();
     connect(ui->StartButton, &QPushButton::released, this, QOverload<>::of(&MainWindow::newGame));
+    connect(ui->LoadButton, &QPushButton::released, this, QOverload<>::of(&MainWindow::load));
     connect(ui->QuitButton, &QPushButton::released, this, QOverload<>::of(&MainWindow::quit));
     connect(settingsDialog, &QDialog::rejected, this, QOverload<>::of(&MainWindow::show));
 }
@@ -22,6 +25,14 @@ void MainWindow::keyPressEvent(QKeyEvent*)
 void MainWindow::newGame() {
     this->hide();
     settingsDialog->show();
+}
+void MainWindow::load() {
+    QString filename = QFileDialog::getOpenFileName(this, "Open saved file", "./", tr("Saved Files (*.sav)"));
+    Map* map = new Map();
+    map->loadGame(filename);
+    map->show();
+    connect(map, &Map::destroyed, this, [=](){ delete map; });
+    this->hide();
 }
 void MainWindow::quit() {
     QApplication::exit(0);

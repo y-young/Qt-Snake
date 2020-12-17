@@ -12,8 +12,10 @@ class Snake : public QWidget
 {
     Q_OBJECT
 
+    friend QDataStream& operator<<(QDataStream& out, const Snake& snake);
+    friend QDataStream& operator>>(QDataStream& in, Snake& snake);
 public:
-    const int id;
+    int id;
     Snake(QWidget *parent = nullptr);
     void draw(QPainter *painter);
     void grow();
@@ -38,6 +40,8 @@ private:
     int lives;
     int speed = SNAKE_SPEED;
     std::queue<Heading> userInputs;
+    void constructBody();
+    void initTimers();
     void keyEvent1(int key);
     void keyEvent2(int key);
     void keyEvent3(int key);

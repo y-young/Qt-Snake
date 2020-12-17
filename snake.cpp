@@ -12,9 +12,15 @@ Snake::Snake(QWidget *parent)
     ++_id;
     heading = SNAKE_HEADINGS[id];
     color = SNAKE_COLORS[id];
+    constructBody();
+    initTimers();
+}
+void Snake::constructBody() {
     for(int i = -direction[heading][0]*SNAKE_LENGTH; i != 0; i+=direction[heading][0]) {
         body.push_back(QPoint(i,0));
     }
+}
+void Snake::initTimers() {
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&Snake::move));
     timer->start(speed);
@@ -226,4 +232,24 @@ void Snake::die(int snakeId) {
 }
 Snake::~Snake() {
     delete undefeatable;
+}
+QDataStream& operator<<(QDataStream& out, const Snake& snake) {
+    out<<snake.id
+       <<snake.lives
+       <<snake.speed
+       <<snake.heading
+       <<snake.undefeatable->remainingTime()
+       <<snake.body;
+    return out;
+}
+QDataStream& operator>>(QDataStream& in, Snake& snake) {
+    qint64 remainingTime;
+    in>>snake.id
+      >>snake.lives
+      >>snake.speed
+      >>snake.heading
+      >>remainingTime
+      >>snake.body;
+    snake.undefeatable = new QDeadlineTimer(remainingTime);
+    return in;
 }

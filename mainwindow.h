@@ -27,6 +27,7 @@ protected:
 
 public slots:
     void newGame();
+    void load();
     void quit();
 };
 #endif // MAINWINDOW_H

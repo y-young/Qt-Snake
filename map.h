@@ -20,6 +20,7 @@ public:
     void init();
     void pause();
     void resume();
+    void loadGame(QString filename);
     ~Map();
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -38,6 +39,9 @@ private:
     void checkEat();
     void initWalls();
     void initPlayers();
+    void registerPlayer(Snake* player);
+    void saveGame();
+    void showPausedDialog();
 
 public slots:
     void noWalls();

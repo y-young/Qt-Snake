@@ -9,6 +9,8 @@ class Walls : public QWidget
 {
     Q_OBJECT
 
+    friend QDataStream& operator<<(QDataStream& out, const Walls& walls);
+    friend QDataStream& operator>>(QDataStream& in, Walls& walls);
 public:
     explicit Walls(QWidget *parent = nullptr);
     void generateSurroundingWalls();

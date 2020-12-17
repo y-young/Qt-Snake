@@ -54,6 +54,7 @@ void Map::keyPressEvent(QKeyEvent *event) {
     switch(key) {
     case Qt::Key_P:
         pause();
+        showPausedDialog();
         break;
     case Qt::Key_R:
         resume();
@@ -79,12 +80,15 @@ void Map::initPlayers() {
     for(int i = 1; i <= playerNum; ++i) {
         Snake* player = new Snake(this);
         players.push_back(player);
-        connect(player, &Snake::snakeMoved, foods, &Foods::checkEat);
-        connect(player, &Snake::snakeMoved, walls, &Walls::checkHit);
-        connect(foods, &Foods::foodEaten, player, &Snake::applyEffect);
-        connect(walls, &Walls::hitWall, player, &Snake::die);
-        connect(player, &Snake::died, this, &Map::snakeDied);
+        registerPlayer(player);
     }
+}
+void Map::registerPlayer(Snake* player) {
+    connect(player, &Snake::snakeMoved, foods, &Foods::checkEat);
+    connect(player, &Snake::snakeMoved, walls, &Walls::checkHit);
+    connect(foods, &Foods::foodEaten, player, &Snake::applyEffect);
+    connect(walls, &Walls::hitWall, player, &Snake::die);
+    connect(player, &Snake::died, this, &Map::snakeDied);
 }
 void Map::noWalls() {
     wallType = NONE;
@@ -105,13 +109,66 @@ void Map::snakeDied(int id, int lives) {
     pause();
     QMessageBox msgBox;
     if(lives == 0) {
+        msgBox.setWindowTitle("Game Over");
         msgBox.setText("Game over!");
         msgBox.exec();
         QApplication::exit(0);
     } else {
+        msgBox.setWindowTitle("Player Died");
         msgBox.setText("Player " + QString::number(id) + " died, " + QString::number(lives) + " live(s) remained.");
         msgBox.exec();
         resume();
+    }
+}
+void Map::saveGame() {
+    QString currentTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh-mm-ss");
+    QFile file(currentTime + ".sav");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        return;
+    }
+
+    QDataStream out(&file);
+    out<<playerNum;
+    out<<(*foods)<<(*walls);
+    for(int i = 0; i < playerNum; ++i) {
+        out<<*(players[i]);
+    }
+    file.close();
+}
+void Map::loadGame(QString filename) {
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return;
+    }
+
+    QDataStream in(&file);
+    in>>playerNum;
+    foods = new Foods();
+    walls = new Walls();
+    in>>*foods>>*walls;
+    for(int i = 0; i < playerNum; ++i) {
+        Snake* player = new Snake(this);
+        in>>(*player);
+        players.push_back(player);
+        registerPlayer(player);
+    }
+    file.close();
+}
+void Map::showPausedDialog() {
+    QMessageBox msgBox(this);
+    msgBox.setWindowTitle("Game Paused");
+    msgBox.setText("Game paused.\nWhat would you like to do?");
+    QPushButton *resumeButton = msgBox.addButton("Resume", QMessageBox::AcceptRole);
+    QPushButton *saveButton = msgBox.addButton(QMessageBox::Save);
+    QPushButton *quitButton = msgBox.addButton("Quit", QMessageBox::RejectRole);
+    msgBox.exec();
+    QPushButton* clicked = (QPushButton*) msgBox.clickedButton();
+    if(clicked == resumeButton) {
+        resume();
+    } else if(clicked == saveButton) {
+        saveGame();
+    } else if(clicked == quitButton) {
+        QApplication::exit(0);
     }
 }
 Map::~Map()
