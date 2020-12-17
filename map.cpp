@@ -75,6 +75,8 @@ void Map::initWalls() {
     if(wallType == SURROUNDING) {
         walls->generateSurroundingWalls();
     }
+    connect(foods, &Foods::foodGenerated, walls, &Walls::checkOverwrite);
+    connect(walls, &Walls::overwritten, foods, &Foods::regenerate);
 }
 void Map::initPlayers() {
     for(int i = 1; i <= playerNum; ++i) {
@@ -89,6 +91,8 @@ void Map::registerPlayer(Snake* player) {
     connect(foods, &Foods::foodEaten, player, &Snake::applyEffect);
     connect(walls, &Walls::hitWall, player, &Snake::die);
     connect(player, &Snake::died, this, &Map::snakeDied);
+    connect(foods, &Foods::foodGenerated, player, &Snake::checkOverwrite);
+    connect(player, &Snake::overwritten, foods, &Foods::regenerate);
 }
 void Map::noWalls() {
     wallType = NONE;

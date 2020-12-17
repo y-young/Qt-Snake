@@ -56,10 +56,12 @@ signals:
     void snakeMoved(int id, QPoint &head);
     void gameOver();
     void died(int id, int lives);
+    void overwritten(int index);
 
 public slots:
     void applyEffect(int snakeId, Effect effect);
     void die(int snakeId);
+    void checkOverwrite(QPoint& p, int index);
 };
 
 #endif // SNAKE_H

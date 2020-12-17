@@ -48,15 +48,24 @@ int Foods::randomFood() {
 Food Foods::newFood() {
     int width = MAP_WIDTH/FOOD_SIZE;
     int height = MAP_HEIGHT/FOOD_SIZE;
-    int x = QRandomGenerator::global()->bounded(-width/2, width/2);
-    int y = QRandomGenerator::global()->bounded(-height/2, height/2);
+    int x, y;
+    do {
+        x = FOOD_SIZE * QRandomGenerator::global()->bounded(-width/2, width/2);
+        y = FOOD_SIZE * QRandomGenerator::global()->bounded(-height/2, height/2);
+    } while(exists(QPoint(x,y)));
     int type = randomFood();
-    return Food(QPoint(x*FOOD_SIZE,y*FOOD_SIZE), type);
+    return Food(QPoint(x,y), type);
 }
 void Foods::generate(int num) {
     for(int i = 1; i <= num; ++i) {
-        list.push_back(newFood());
+        Food food = newFood();
+        list.push_back(food);
+        emit foodGenerated(food.pos, list.size() - 1);
     }
+}
+void Foods::regenerate(int index) {
+    list.remove(index);
+    generate();
 }
 void Foods::checkEat(int snakeId, const QPoint& snakeHead) {
     for(int i = 0; i < list.size(); ++i) {
@@ -75,7 +84,7 @@ void Foods::checkEat(int snakeId, const QPoint& snakeHead) {
         }
     }
 }
-bool Foods::contains(QPoint p) {
+bool Foods::exists(QPoint p) {
     for(int i = 0; i < list.size(); ++i) {
         if(list[i].pos == p) {
             return true;

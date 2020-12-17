@@ -40,6 +40,11 @@ void Walls::checkHit(int snakeId, const QPoint& head) {
         emit hitWall(snakeId);
     }
 }
+void Walls::checkOverwrite(QPoint& p, int index) {
+    if(list.contains(p)) {
+        emit overwritten(index);
+    }
+}
 Walls::~Walls()
 {
 

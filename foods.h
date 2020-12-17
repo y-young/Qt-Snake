@@ -44,15 +44,17 @@ private:
     QVector<Food> list;
     int scale;
     int rockets, snails;
-    bool contains(QPoint p);
+    bool exists(QPoint p);
     Food newFood();
     int randomFood();
 
 signals:
     void foodEaten(int snakeId, Effect effect);
+    void foodGenerated(QPoint& p, int index);
 
 public slots:
     void checkEat(int id, const QPoint& head);
+    void regenerate(int index);
 };
 
 #endif // FOODS_H

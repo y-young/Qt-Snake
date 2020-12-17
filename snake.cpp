@@ -230,6 +230,11 @@ void Snake::die(int snakeId) {
         increaseUndefeatable(3);
     }
 }
+void Snake::checkOverwrite(QPoint& p, int index) {
+    if(body.contains(p)) {
+        emit overwritten(index);
+    }
+}
 Snake::~Snake() {
     delete undefeatable;
 }
