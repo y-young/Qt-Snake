@@ -12,8 +12,7 @@ struct Food {
     QString type;
     QPoint pos;
     Effect effect;
-    Food(QPoint p) {
-        int t = QRandomGenerator::global()->bounded(0, 9);
+    Food(QPoint p, int t) {
         type = FoodTypes[t];
         effect = FoodEffects[t];
         pos = p;
@@ -35,8 +34,10 @@ public:
 private:
     QVector<Food> list;
     int scale;
+    int rockets, snails;
     bool contains(QPoint p);
     Food newFood();
+    int randomFood();
 
 signals:
     void foodEaten(int snakeId, Effect effect);

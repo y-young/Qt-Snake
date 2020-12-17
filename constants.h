@@ -32,14 +32,14 @@ enum Effect {NONE, GROW, EXTEND, DIE, SPEED_UP, SLOW_DOWN, UNDEFEATABLE};
 const QString FoodTypes[] = {
     "apple", "grape", "peach", "pear",
     "rocket", "snail",
-    "heart", "bomb",
-    "shield"
+    "shield",
+    "heart"
 };
 const Effect FoodEffects[] = {
     GROW, GROW, GROW, GROW,
     SPEED_UP, SLOW_DOWN,
-    EXTEND, DIE,
-    UNDEFEATABLE
+    UNDEFEATABLE,
+    EXTEND
 };
 
 //walls

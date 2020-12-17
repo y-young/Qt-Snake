@@ -18,12 +18,40 @@ void Foods::draw(QPainter *painter)
         painter->drawImage(QRectF(p.rx()-FOOD_RENDER_OFFSET, p.ry()-FOOD_RENDER_OFFSET, FOOD_RENDER_SIZE, FOOD_RENDER_SIZE), img);
     }
 }
+int Foods::randomFood() {
+    int rand = QRandomGenerator::global()->bounded(101);
+    if(rand <= 70) { // normal fruits
+        return QRandomGenerator::global()->bounded(0, 4);
+    } else {
+        while(true) {
+            int type = QRandomGenerator::global()->bounded(4, 8);
+            if(FoodTypes[type] == "rocket") {
+                if(rockets == 2) {
+                    continue;
+                } else {
+                    ++rockets;
+                    return type;
+                }
+            }
+            if(FoodTypes[type] == "snail") {
+                if(snails == 2) {
+                    continue;
+                } else {
+                    ++snails;
+                    return type;
+                }
+            }
+            return type;
+        }
+    }
+}
 Food Foods::newFood() {
     int width = MAP_WIDTH/FOOD_SIZE;
     int height = MAP_HEIGHT/FOOD_SIZE;
     int x = QRandomGenerator::global()->bounded(-width/2, width/2);
     int y = QRandomGenerator::global()->bounded(-height/2, height/2);
-    return Food(QPoint(x*FOOD_SIZE,y*FOOD_SIZE));
+    int type = randomFood();
+    return Food(QPoint(x*FOOD_SIZE,y*FOOD_SIZE), type);
 }
 void Foods::generate(int num) {
     for(int i = 1; i <= num; ++i) {
@@ -35,6 +63,12 @@ void Foods::checkEat(int snakeId, const QPoint& snakeHead) {
         if(list[i].pos == snakeHead) {
             Food food = list[i];
             list.remove(i);
+            if(food.type == "rocket") {
+                --rockets;
+            }
+            if(food.type == "snail") {
+                --snails;
+            }
             generate();
             emit foodEaten(snakeId, food.effect);
             return;
