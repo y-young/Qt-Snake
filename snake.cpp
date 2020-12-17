@@ -17,8 +17,8 @@ Snake::Snake(QWidget *parent)
     }
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&Snake::move));
-    connect(timer, &QTimer::timeout, this, QOverload<>::of(&Snake::decreaseUndefeatable));
     timer->start(speed);
+    undefeatable = new QDeadlineTimer();
 }
 void Snake::applyEffect(int snakeId, Effect effect) {
     if(snakeId != id) {
@@ -46,13 +46,11 @@ void Snake::applyEffect(int snakeId, Effect effect) {
 }
 void Snake::slowDown() {
     int newSpeed = speed + SPEED_STEP;
-    undefeatableTime = undefeatableTime * speed / newSpeed;
     speed = newSpeed;
     timer->setInterval(speed);
 }
 void Snake::speedUp() {
     int newSpeed = speed - SPEED_STEP;
-    undefeatableTime = undefeatableTime * speed / newSpeed;
     speed = newSpeed;
     timer->setInterval(speed);
 }
@@ -202,12 +200,12 @@ void Snake::checkHitSelf() {
         die(id);
     }
 }
-void Snake::increaseUndefeatable() {
-    undefeatableTime += 3000 / speed;
-}
-void Snake::decreaseUndefeatable() {
-    if(undefeatableTime > 0) {
-        undefeatableTime -= 1;
+void Snake::increaseUndefeatable(int secs) {
+    if(undefeatable->hasExpired()) {
+        delete undefeatable;
+        undefeatable = new QDeadlineTimer(secs*1000);
+    } else {
+        *undefeatable += secs * 1000;
     }
 }
 QPoint Snake::head() {
@@ -217,12 +215,15 @@ void Snake::die(int snakeId) {
     if(snakeId != id) {
         return;
     }
-    if(undefeatableTime > 0) {
+    if(!undefeatable->hasExpired()) {
         return;
     }
     --lives;
     emit died(id, lives);
     if(lives > 0) {
-        increaseUndefeatable();
+        increaseUndefeatable(3);
     }
+}
+Snake::~Snake() {
+    delete undefeatable;
 }

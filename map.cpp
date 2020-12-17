@@ -76,7 +76,6 @@ void Map::initWalls() {
     }
 }
 void Map::initPlayers() {
-    qDebug() << playerNum;
     for(int i = 1; i <= playerNum; ++i) {
         Snake* player = new Snake(this);
         players.push_back(player);

@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QKeyEvent>
 #include <QVector>
+#include <QDeadlineTimer>
 #include <queue>
 #include "constants.h"
 
@@ -23,6 +24,7 @@ public:
     QPoint head();
     void pause();
     void resume();
+    ~Snake();
 protected:
 
 private:
@@ -32,7 +34,7 @@ private:
     QColor color;
     int scale;
     QTimer *timer;
-    int undefeatableTime = 0;
+    QDeadlineTimer *undefeatable = nullptr;
     int lives;
     int speed = SNAKE_SPEED;
     std::queue<Heading> userInputs;
@@ -44,8 +46,7 @@ private:
     void move();
     void checkHitSelf();
     void checkEat();
-    void increaseUndefeatable();
-    void decreaseUndefeatable();
+    void increaseUndefeatable(int secs = 5);
 
 signals:
     void snakeMoved(int id, QPoint &head);
