@@ -13,6 +13,7 @@ class Walls : public QWidget
     friend QDataStream& operator>>(QDataStream& in, Walls& walls);
 public:
     explicit Walls(QWidget *parent = nullptr);
+    void add(QPoint pos);
     void generateSurroundingWalls();
     void draw(QPainter *painter);
     ~Walls();

@@ -25,6 +25,7 @@ const Heading SNAKE_HEADINGS[] = {RIGHT, LEFT, RIGHT};
 #define MAP_WIDTH 240
 #define MAP_HEIGHT 160
 #define RENDER_SPEED 30
+enum MapItem { WALLS, FOODS };
 
 //foods
 #define FOOD_SIZE 4

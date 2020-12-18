@@ -51,6 +51,9 @@ void Map::showEvent(QShowEvent *) {
 }
 void Map::keyPressEvent(QKeyEvent *event) {
     int key = event->key();
+    if(editing) {
+        changeEditingItem(key);
+    }
     switch(key) {
     case Qt::Key_P:
         pause();
@@ -63,6 +66,16 @@ void Map::keyPressEvent(QKeyEvent *event) {
         for(int i = 0; i < players.size(); ++i) {
             players[i]->keyEvent(key);
         }
+    }
+}
+void Map::changeEditingItem(int key) {
+    switch (key) {
+    case Qt::Key_W:
+        editingItem = WALLS;
+        break;
+    case Qt::Key_F:
+        editingItem = FOODS;
+        break;
     }
 }
 void Map::init() {
@@ -188,6 +201,7 @@ void Map::showPausedDialog() {
     msgBox.setText("Game paused.\nWhat would you like to do?");
     QPushButton *resumeButton = msgBox.addButton("Resume", QMessageBox::AcceptRole);
     QPushButton *saveButton = msgBox.addButton(QMessageBox::Save);
+    msgBox.addButton("Edit map", QMessageBox::NoRole);
     QPushButton *quitButton = msgBox.addButton("Quit", QMessageBox::RejectRole);
     msgBox.exec();
     QPushButton* clicked = (QPushButton*) msgBox.clickedButton();
@@ -199,10 +213,41 @@ void Map::showPausedDialog() {
         QApplication::exit(0);
     }
 }
+void Map::editMap() {
+    QDockWidget *toolbar = new QDockWidget("Toolbar", this);
+    toolbar->setFeatures(QDockWidget::AllDockWidgetFeatures);
+}
+void Map::mousePressEvent(QMouseEvent *event) {
+    if(!editing) {
+        return;
+    }
+    int x = event->x(), y = event->y();
+    // translate
+    x -= WINDOW_WIDTH / 2;
+    y -= WINDOW_HEIGHT / 2;
+    // scale
+    x /= 4;
+    y /= 4;
+    // round to grid
+    x -= x % GRID_SIZE;
+    y -= y % GRID_SIZE;
+    if(x < 0) {
+        x -= GRID_SIZE;
+    }
+    if(y < 0) {
+        y -= GRID_SIZE;
+    }
+//    qDebug() << x << y;
+    if(event->button() == Qt::LeftButton) {
+        walls->add(QPoint(x, y));
+        this->update();
+    }
+}
 Map::~Map()
 {
     for(int i = 0; i < players.size(); ++i) {
         delete players[i];
     }
     delete foods;
+    delete walls;
 }

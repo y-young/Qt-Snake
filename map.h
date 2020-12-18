@@ -28,6 +28,7 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
     void showEvent(QShowEvent *) override;
+    void mousePressEvent(QMouseEvent *) override;
 private:
     QVector<Snake*> players;
     Foods *foods;
@@ -36,6 +37,8 @@ private:
     int scale;
     int playerNum = 1;
     bool ai = false;
+    bool editing = true;
+    MapItem editingItem = WALLS;
     enum {NONE, SURROUNDING} wallType = NONE;
     void snakeMove();
     void checkEat();
@@ -43,6 +46,8 @@ private:
     void initPlayers();
     void registerPlayer(Snake* player);
     void saveGame();
+    void editMap();
+    void changeEditingItem(int key);
     void showPausedDialog();
 
 public slots:
