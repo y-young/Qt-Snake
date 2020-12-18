@@ -150,7 +150,10 @@ void Map::saveGame() {
     for(int i = 0; i < playerNum; ++i) {
         out<<*(players[i]);
     }
-    out<<ai<<*(players[playerNum]);
+    out<<ai;
+    if(ai) {
+        out<<*(players[playerNum]);
+    }
     file.close();
 }
 void Map::loadGame(QString filename) {
