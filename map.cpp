@@ -84,6 +84,11 @@ void Map::initPlayers() {
         players.push_back(player);
         registerPlayer(player);
     }
+    if(ai) {
+        AISnake* ai = new AISnake(foods);
+        players.push_back(ai);
+        registerPlayer(ai);
+    }
 }
 void Map::registerPlayer(Snake* player) {
     connect(player, &Snake::snakeMoved, foods, &Foods::checkEat);
@@ -108,6 +113,14 @@ void Map::doublePlayers() {
 }
 void Map::triplePlayers() {
     playerNum = 3;
+}
+void Map::onlyAI() {
+    playerNum = 0;
+    ai = true;
+}
+void Map::playerAndAI() {
+    playerNum = 1;
+    ai = true;
 }
 void Map::snakeDied(int id, int lives) {
     pause();
@@ -137,6 +150,7 @@ void Map::saveGame() {
     for(int i = 0; i < playerNum; ++i) {
         out<<*(players[i]);
     }
+    out<<ai<<*(players[playerNum]);
     file.close();
 }
 void Map::loadGame(QString filename) {
@@ -155,6 +169,13 @@ void Map::loadGame(QString filename) {
         in>>(*player);
         players.push_back(player);
         registerPlayer(player);
+    }
+    in>>ai;
+    if(ai) {
+        AISnake* ai = new AISnake(foods);
+        in>>(*ai);
+        players.push_back(ai);
+        registerPlayer(ai);
     }
     file.close();
 }

@@ -57,8 +57,10 @@ void Snake::slowDown() {
 }
 void Snake::speedUp() {
     int newSpeed = speed - SPEED_STEP;
-    speed = newSpeed;
-    timer->setInterval(speed);
+    if(newSpeed >= SNAKE_MAX_SPEED) {
+        speed = newSpeed;
+        timer->setInterval(speed);
+    }
 }
 void Snake::draw(QPainter *painter)
 {

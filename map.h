@@ -7,6 +7,7 @@
 #include "snake.h"
 #include "foods.h"
 #include "walls.h"
+#include "aisnake.h"
 #include "constants.h"
 
 namespace Ui {
@@ -34,6 +35,7 @@ private:
     QTimer *timer;
     int scale;
     int playerNum = 1;
+    bool ai = false;
     enum {NONE, SURROUNDING} wallType = NONE;
     void snakeMove();
     void checkEat();
@@ -49,6 +51,8 @@ public slots:
     void singlePlayer();
     void doublePlayers();
     void triplePlayers();
+    void onlyAI();
+    void playerAndAI();
     void snakeDied(int id, int lives);
 };
 

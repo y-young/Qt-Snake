@@ -15,6 +15,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     connect(ui->SinglePlayerButton, &QRadioButton::clicked, map, QOverload<>::of(&Map::singlePlayer));
     connect(ui->DoublePlayersButton, &QRadioButton::clicked, map, QOverload<>::of(&Map::doublePlayers));
     connect(ui->TriplePlayersButton, &QRadioButton::clicked, map, QOverload<>::of(&Map::triplePlayers));
+    connect(ui->OnlyAIButton, &QRadioButton::clicked, map, QOverload<>::of(&Map::onlyAI));
+    connect(ui->PlayerAndAIButton, &QRadioButton::clicked, map, QOverload<>::of(&Map::playerAndAI));
 }
 void SettingsDialog::accept() {
     map->init();

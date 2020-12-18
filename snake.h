@@ -27,28 +27,29 @@ public:
     void pause();
     void resume();
     ~Snake();
+
 protected:
+    QColor color;
+    QTimer *timer;
+    QVector<QPoint> body;
+    Heading heading;
+    int speed = SNAKE_SPEED;
+    QDeadlineTimer *undefeatable = nullptr;
+    virtual void move();
+    void setHeading(Heading newHeading);
+    void checkHitSelf();
 
 private:
     static int _id;
-    QVector<QPoint> body;
-    Heading heading;
-    QColor color;
     int scale;
-    QTimer *timer;
-    QDeadlineTimer *undefeatable = nullptr;
     int lives;
-    int speed = SNAKE_SPEED;
     std::queue<Heading> userInputs;
     void constructBody();
     void initTimers();
     void keyEvent1(int key);
     void keyEvent2(int key);
     void keyEvent3(int key);
-    void setHeading(Heading newHeading);
     void handleUserInput();
-    void move();
-    void checkHitSelf();
     void checkEat();
     void increaseUndefeatable(int secs = 5);
 

@@ -30,6 +30,7 @@ class Foods : public QWidget
 {
     Q_OBJECT
 
+    friend class AISnake;
     friend QDataStream& operator<<(QDataStream& out, const Foods& foods);
     friend QDataStream& operator>>(QDataStream& in, Foods& foods);
 public:

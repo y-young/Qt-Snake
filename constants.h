@@ -8,12 +8,14 @@
 //snake
 #define SNAKE_LENGTH 4
 #define SNAKE_SPEED 40
-#define SPEED_STEP 10
+#define SNAKE_MAX_SPEED 30
+#define SPEED_STEP 5
 
-enum Heading {UP, DOWN, LEFT, RIGHT};
+enum Heading {UP, LEFT, DOWN, RIGHT};
 const int direction[4][2] = {
-    {0,-GRID_SIZE}, {0,GRID_SIZE},{-GRID_SIZE,0}, {GRID_SIZE,0}
+    {0,-GRID_SIZE}, {-GRID_SIZE,0}, {0,GRID_SIZE}, {GRID_SIZE,0}
 };
+const QColor AI_SNAKE_COLOR = QColor("orange");
 const QString SNAKE_COLORS[] = {"red", "blue", "green"};
 const Heading SNAKE_HEADINGS[] = {RIGHT, LEFT, RIGHT};
 
