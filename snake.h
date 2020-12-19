@@ -16,6 +16,7 @@ class Snake : public QWidget
     friend QDataStream& operator>>(QDataStream& in, Snake& snake);
 public:
     int id;
+    int lives;
     Snake(QWidget *parent = nullptr);
     void draw(QPainter *painter);
     void grow();
@@ -27,6 +28,7 @@ public:
     void pause();
     void resume();
     ~Snake();
+    virtual bool isAI();
 
 protected:
     QColor color;
@@ -42,7 +44,6 @@ protected:
 private:
     static int _id;
     int scale;
-    int lives;
     std::queue<Heading> userInputs;
     void constructBody();
     void initTimers();
@@ -58,6 +59,7 @@ signals:
     void gameOver();
     void died(int id, int lives);
     void overwritten(int index);
+    void livesUpdated(int lives);
 
 public slots:
     void applyEffect(int snakeId, Effect effect);

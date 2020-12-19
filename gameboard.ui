@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GameBoard</class>
+ <widget class="QWidget" name="GameBoard">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1200</width>
+    <height>640</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Touhou Hebijuu ~ Wily Snake and Weakest Food</string>
+  </property>
+  <widget class="QWidget" name="horizontalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1200</width>
+     <height>640</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="MainLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <item>
+     <layout class="QVBoxLayout" name="MapLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetFixedSize</enum>
+      </property>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="SidebarLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetFixedSize</enum>
+      </property>
+      <item>
+       <layout class="QVBoxLayout" name="ScoreBoardLayout" stretch="">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetMinimumSize</enum>
+        </property>
+       </layout>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="PanelLayout" rowstretch="0">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetMinimumSize</enum>
+        </property>
+        <item row="0" column="0">
+         <widget class="QDockWidget" name="dockWidget">
+          <property name="maximumSize">
+           <size>
+            <width>240</width>
+            <height>240</height>
+           </size>
+          </property>
+          <property name="floating">
+           <bool>false</bool>
+          </property>
+          <property name="allowedAreas">
+           <set>Qt::RightDockWidgetArea</set>
+          </property>
+          <property name="windowTitle">
+           <string>Game Control</string>
+          </property>
+          <widget class="QWidget" name="dockWidgetContents">
+           <widget class="QWidget" name="">
+            <property name="geometry">
+             <rect>
+              <x>20</x>
+              <y>10</y>
+              <width>201</width>
+              <height>101</height>
+             </rect>
+            </property>
+            <layout class="QGridLayout" name="gridLayout">
+             <item row="0" column="0">
+              <widget class="QPushButton" name="pushButton">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
+               <property name="text">
+                <string>Pause</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QPushButton" name="pushButton_2">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
+               <property name="text">
+                <string>Resume</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QPushButton" name="pushButton_4">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
+               <property name="text">
+                <string>Edit Map</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QPushButton" name="pushButton_3">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
+               <property name="text">
+                <string>Quit</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

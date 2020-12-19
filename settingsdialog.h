@@ -2,7 +2,7 @@
 #define SETTINGSDIALOG_H
 
 #include <QDialog>
-#include "map.h"
+#include "gameboard.h"
 
 namespace Ui {
 class SettingsDialog;
@@ -18,7 +18,7 @@ public:
 
 private:
     Ui::SettingsDialog *ui;
-    Map* map;
+    GameBoard* game;
 
 public slots:
     void accept();

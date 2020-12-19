@@ -45,6 +45,7 @@ void Snake::applyEffect(int snakeId, Effect effect) {
         break;
     case EXTEND:
         ++lives;
+        emit livesUpdated(lives);
         break;
     default:
         break;
@@ -206,6 +207,7 @@ void Snake::move() {
 void Snake::checkHitSelf() {
     if(body.indexOf(head()) != body.size() - 1) {
         die(id);
+        qDebug()<<body.indexOf(head())<<body.size();
     }
 }
 void Snake::increaseUndefeatable(int secs) {
@@ -228,6 +230,7 @@ void Snake::die(int snakeId) {
     }
     --lives;
     emit died(id, lives);
+    emit livesUpdated(lives);
     if(lives > 0) {
         increaseUndefeatable(3);
     }
@@ -239,6 +242,9 @@ void Snake::checkOverwrite(QPoint& p, int index) {
 }
 Snake::~Snake() {
     delete undefeatable;
+}
+bool Snake::isAI() {
+    return false;
 }
 QDataStream& operator<<(QDataStream& out, const Snake& snake) {
     out<<snake.id

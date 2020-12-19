@@ -28,10 +28,10 @@ void MainWindow::newGame() {
 }
 void MainWindow::load() {
     QString filename = QFileDialog::getOpenFileName(this, "Open saved file", "./", tr("Saved Files (*.sav)"));
-    Map* map = new Map();
-    map->loadGame(filename);
-    map->show();
-    connect(map, &Map::destroyed, this, [=](){ delete map; });
+    game = new GameBoard();
+    game->loadGame(filename);
+    game->show();
+    connect(game, &GameBoard::destroyed, this, [=](){ delete game; });
     this->hide();
 }
 void MainWindow::quit() {

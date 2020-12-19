@@ -2,6 +2,7 @@
 #define CONSTANTS_H
 
 #include <QString>
+#include <QColor>
 
 #define GRID_SIZE 4
 
@@ -26,12 +27,13 @@ const Heading SNAKE_HEADINGS[] = {RIGHT, LEFT, RIGHT};
 #define MAP_HEIGHT 160
 #define RENDER_SPEED 30
 enum MapItem { WALLS, FOODS };
+enum WallType {NONE, SURROUNDING};
 
 //foods
 #define FOOD_SIZE 4
 #define FOOD_RENDER_SIZE 7
 #define FOOD_RENDER_OFFSET 1.5
-enum Effect {NONE, GROW, EXTEND, DIE, SPEED_UP, SLOW_DOWN, UNDEFEATABLE};
+enum Effect {GROW, EXTEND, DIE, SPEED_UP, SLOW_DOWN, UNDEFEATABLE};
 const QString FoodTypes[] = {
     "apple", "grape", "peach", "pear",
     "rocket", "snail",

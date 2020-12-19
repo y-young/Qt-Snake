@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include "settingsdialog.h"
-#include "map.h"
+#include "gameboard.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -19,7 +19,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    Map* map;
+    GameBoard* game;
     SettingsDialog *settingsDialog;
 
 protected:

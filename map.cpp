@@ -7,7 +7,7 @@
 Map::Map(QWidget *parent) :
     QWidget(parent)
 {
-    this->setFocusPolicy(Qt::StrongFocus);
+//    this->setFocusPolicy(Qt::StrongFocus);
     this->setStyleSheet("background-color: white");
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&Map::update));
@@ -46,26 +46,13 @@ void Map::resume() {
         players[i]->resume();
     }
 }
-void Map::showEvent(QShowEvent *) {
-    this->resume();
-}
 void Map::keyPressEvent(QKeyEvent *event) {
     int key = event->key();
     if(editing) {
         changeEditingItem(key);
     }
-    switch(key) {
-    case Qt::Key_P:
-        pause();
-        showPausedDialog();
-        break;
-    case Qt::Key_R:
-        resume();
-        break;
-    default:
-        for(int i = 0; i < players.size(); ++i) {
-            players[i]->keyEvent(key);
-        }
+    for(int i = 0; i < players.size(); ++i) {
+        players[i]->keyEvent(key);
     }
 }
 void Map::changeEditingItem(int key) {
@@ -81,7 +68,6 @@ void Map::changeEditingItem(int key) {
 void Map::init() {
     foods = new Foods();
     initWalls();
-    initPlayers();
 }
 void Map::initWalls() {
     walls = new Walls();
@@ -91,131 +77,33 @@ void Map::initWalls() {
     connect(foods, &Foods::foodGenerated, walls, &Walls::checkOverwrite);
     connect(walls, &Walls::overwritten, foods, &Foods::regenerate);
 }
-void Map::initPlayers() {
-    for(int i = 1; i <= playerNum; ++i) {
-        Snake* player = new Snake(this);
-        players.push_back(player);
-        registerPlayer(player);
-    }
-    if(ai) {
-        AISnake* ai = new AISnake(foods);
-        players.push_back(ai);
-        registerPlayer(ai);
-    }
-}
-void Map::registerPlayer(Snake* player) {
+void Map::addPlayer(Snake *player) {
+    players.push_back(player);
     connect(player, &Snake::snakeMoved, foods, &Foods::checkEat);
     connect(player, &Snake::snakeMoved, walls, &Walls::checkHit);
     connect(foods, &Foods::foodEaten, player, &Snake::applyEffect);
     connect(walls, &Walls::hitWall, player, &Snake::die);
-    connect(player, &Snake::died, this, &Map::snakeDied);
     connect(foods, &Foods::foodGenerated, player, &Snake::checkOverwrite);
     connect(player, &Snake::overwritten, foods, &Foods::regenerate);
-}
-void Map::noWalls() {
-    wallType = NONE;
-}
-void Map::surroundingWalls() {
-    wallType = SURROUNDING;
-}
-void Map::singlePlayer() {
-    playerNum = 1;
-}
-void Map::doublePlayers() {
-    playerNum = 2;
-}
-void Map::triplePlayers() {
-    playerNum = 3;
-}
-void Map::onlyAI() {
-    playerNum = 0;
-    ai = true;
-}
-void Map::playerAndAI() {
-    playerNum = 1;
-    ai = true;
-}
-void Map::snakeDied(int id, int lives) {
-    pause();
-    QMessageBox msgBox;
-    if(lives == 0) {
-        msgBox.setWindowTitle("Game Over");
-        msgBox.setText("Game over!");
-        msgBox.exec();
-        QApplication::exit(0);
-    } else {
-        msgBox.setWindowTitle("Player Died");
-        msgBox.setText("Player " + QString::number(id) + " died, " + QString::number(lives) + " live(s) remained.");
-        msgBox.exec();
-        resume();
+    if(player->isAI()) {
+        ((AISnake* )player)->setFoods(foods);
     }
 }
-void Map::saveGame() {
-    QString currentTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh-mm-ss");
-    QFile file(currentTime + ".sav");
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        return;
-    }
-
-    QDataStream out(&file);
-    out<<playerNum;
-    out<<(*foods)<<(*walls);
-    for(int i = 0; i < playerNum; ++i) {
-        out<<*(players[i]);
-    }
-    out<<ai;
-    if(ai) {
-        out<<*(players[playerNum]);
-    }
-    file.close();
+QDataStream& operator<<(QDataStream& out, const Map& map) {
+    out<<*(map.foods)<<*(map.walls);
+    return out;
 }
-void Map::loadGame(QString filename) {
-    QFile file(filename);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        return;
-    }
-
-    QDataStream in(&file);
-    in>>playerNum;
-    foods = new Foods();
-    walls = new Walls();
-    in>>*foods>>*walls;
-    for(int i = 0; i < playerNum; ++i) {
-        Snake* player = new Snake(this);
-        in>>(*player);
-        players.push_back(player);
-        registerPlayer(player);
-    }
-    in>>ai;
-    if(ai) {
-        AISnake* ai = new AISnake(foods);
-        in>>(*ai);
-        players.push_back(ai);
-        registerPlayer(ai);
-    }
-    file.close();
+QDataStream& operator>>(QDataStream& in, Map& map) {
+    map.foods = new Foods();
+    map.walls = new Walls();
+    in>>*(map.foods)>>*(map.walls);
+    return in;
 }
-void Map::showPausedDialog() {
-    QMessageBox msgBox(this);
-    msgBox.setWindowTitle("Game Paused");
-    msgBox.setText("Game paused.\nWhat would you like to do?");
-    QPushButton *resumeButton = msgBox.addButton("Resume", QMessageBox::AcceptRole);
-    QPushButton *saveButton = msgBox.addButton(QMessageBox::Save);
-    msgBox.addButton("Edit map", QMessageBox::NoRole);
-    QPushButton *quitButton = msgBox.addButton("Quit", QMessageBox::RejectRole);
-    msgBox.exec();
-    QPushButton* clicked = (QPushButton*) msgBox.clickedButton();
-    if(clicked == resumeButton) {
-        resume();
-    } else if(clicked == saveButton) {
-        saveGame();
-    } else if(clicked == quitButton) {
-        QApplication::exit(0);
-    }
+void Map::setWallType(WallType type) {
+    this->wallType = type;
 }
 void Map::editMap() {
-    QDockWidget *toolbar = new QDockWidget("Toolbar", this);
-    toolbar->setFeatures(QDockWidget::AllDockWidgetFeatures);
+
 }
 void Map::mousePressEvent(QMouseEvent *event) {
     if(!editing) {
@@ -245,9 +133,6 @@ void Map::mousePressEvent(QMouseEvent *event) {
 }
 Map::~Map()
 {
-    for(int i = 0; i < players.size(); ++i) {
-        delete players[i];
-    }
     delete foods;
     delete walls;
 }

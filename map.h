@@ -10,24 +10,24 @@
 #include "aisnake.h"
 #include "constants.h"
 
-namespace Ui {
-class Map;
-}
 class Map : public QWidget
 {
     Q_OBJECT
+
+    friend QDataStream& operator<<(QDataStream& out, const Map& map);
+    friend QDataStream& operator>>(QDataStream& in, Map& map);
 public:
     explicit Map(QWidget *parent = nullptr);
     void init();
+    void addPlayer(Snake* player);
     void pause();
     void resume();
-    void loadGame(QString filename);
+    void setWallType(WallType type);
+    void keyPressEvent(QKeyEvent *event) override;
     ~Map();
 protected:
     void paintEvent(QPaintEvent *event) override;
-    void keyPressEvent(QKeyEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
-    void showEvent(QShowEvent *) override;
     void mousePressEvent(QMouseEvent *) override;
 private:
     QVector<Snake*> players;
@@ -35,30 +35,15 @@ private:
     Walls *walls;
     QTimer *timer;
     int scale;
-    int playerNum = 1;
-    bool ai = false;
     bool editing = true;
     MapItem editingItem = WALLS;
-    enum {NONE, SURROUNDING} wallType = NONE;
-    void snakeMove();
-    void checkEat();
+    WallType wallType = NONE;
     void initWalls();
-    void initPlayers();
-    void registerPlayer(Snake* player);
-    void saveGame();
     void editMap();
     void changeEditingItem(int key);
-    void showPausedDialog();
 
 public slots:
-    void noWalls();
-    void surroundingWalls();
-    void singlePlayer();
-    void doublePlayers();
-    void triplePlayers();
-    void onlyAI();
-    void playerAndAI();
-    void snakeDied(int id, int lives);
+
 };
 
 #endif // MAP_H

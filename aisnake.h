@@ -10,8 +10,10 @@ class AISnake : public Snake
     Q_OBJECT
 
 public:
-    explicit AISnake(Foods* foods);
+    explicit AISnake();
+    void setFoods(Foods* f);
     void keyEvent(int key);
+    bool isAI() override;
     ~AISnake();
 
 protected:

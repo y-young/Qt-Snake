@@ -2,12 +2,14 @@
 #include <QTimer>
 #include <QDeadlineTimer>
 
-AISnake::AISnake(Foods* f) :
+AISnake::AISnake() :
     Snake()
 {
     id = 3;
-    foods = &f->list;
     color = AI_SNAKE_COLOR;
+}
+void AISnake::setFoods(Foods *f) {
+    foods = &f->list;
     connect(f, &Foods::foodEaten, this, &AISnake::refreshTarget);
     refreshTarget();
 }
@@ -75,6 +77,9 @@ void AISnake::refreshTarget() {
         }
     }
     qDebug() << target;
+}
+bool AISnake::isAI() {
+    return true;
 }
 AISnake::~AISnake()
 {

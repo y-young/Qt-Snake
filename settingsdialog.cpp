@@ -9,22 +9,22 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->setupUi(this);
     ui->NoWallsButton->setChecked(true);
     ui->SinglePlayerButton->setChecked(true);
-    map = new Map();
-    connect(ui->NoWallsButton, &QRadioButton::clicked, map, QOverload<>::of(&Map::noWalls));
-    connect(ui->SurroundingWallsButton, &QRadioButton::clicked, map, QOverload<>::of(&Map::surroundingWalls));
-    connect(ui->SinglePlayerButton, &QRadioButton::clicked, map, QOverload<>::of(&Map::singlePlayer));
-    connect(ui->DoublePlayersButton, &QRadioButton::clicked, map, QOverload<>::of(&Map::doublePlayers));
-    connect(ui->TriplePlayersButton, &QRadioButton::clicked, map, QOverload<>::of(&Map::triplePlayers));
-    connect(ui->OnlyAIButton, &QRadioButton::clicked, map, QOverload<>::of(&Map::onlyAI));
-    connect(ui->PlayerAndAIButton, &QRadioButton::clicked, map, QOverload<>::of(&Map::playerAndAI));
+    game = new GameBoard();
+    connect(ui->NoWallsButton, &QRadioButton::clicked, game, QOverload<>::of(&GameBoard::noWalls));
+    connect(ui->SurroundingWallsButton, &QRadioButton::clicked, game, QOverload<>::of(&GameBoard::surroundingWalls));
+    connect(ui->SinglePlayerButton, &QRadioButton::clicked, game, QOverload<>::of(&GameBoard::singlePlayer));
+    connect(ui->DoublePlayersButton, &QRadioButton::clicked, game, QOverload<>::of(&GameBoard::doublePlayers));
+    connect(ui->TriplePlayersButton, &QRadioButton::clicked, game, QOverload<>::of(&GameBoard::triplePlayers));
+    connect(ui->OnlyAIButton, &QRadioButton::clicked, game, QOverload<>::of(&GameBoard::onlyAI));
+    connect(ui->PlayerAndAIButton, &QRadioButton::clicked, game, QOverload<>::of(&GameBoard::playerAndAI));
 }
 void SettingsDialog::accept() {
-    map->init();
-    map->show();
+    game->init();
+    game->show();
     this->hide();
 }
 SettingsDialog::~SettingsDialog()
 {
-    delete map;
+    delete game;
     delete ui;
 }

@@ -11,9 +11,11 @@ CONFIG += c++11
 SOURCES += \
     aisnake.cpp \
     foods.cpp \
+    gameboard.cpp \
     main.cpp \
     mainwindow.cpp \
     map.cpp \
+    scoreboard.cpp \
     settingsdialog.cpp \
     snake.cpp \
     walls.cpp
@@ -22,14 +24,18 @@ HEADERS += \
     aisnake.h \
     constants.h \
     foods.h \
+    gameboard.h \
     mainwindow.h \
     map.h \
+    scoreboard.h \
     settingsdialog.h \
     snake.h \
     walls.h
 
 FORMS += \
+    gameboard.ui \
     mainwindow.ui \
+    scoreboard.ui \
     settingsdialog.ui
 
 # Default rules for deployment.
