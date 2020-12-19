@@ -16,7 +16,9 @@ class Snake : public QWidget
     friend QDataStream& operator>>(QDataStream& in, Snake& snake);
 public:
     int id;
-    int lives;
+    int lives = 1;
+    int score = 0;
+    QDeadlineTimer *undefeatable = nullptr;
     Snake(QWidget *parent = nullptr);
     void draw(QPainter *painter);
     void grow();
@@ -36,7 +38,6 @@ protected:
     QVector<QPoint> body;
     Heading heading;
     int speed = SNAKE_SPEED;
-    QDeadlineTimer *undefeatable = nullptr;
     virtual void move();
     void setHeading(Heading newHeading);
     void checkHitSelf();
@@ -51,7 +52,6 @@ private:
     void keyEvent2(int key);
     void keyEvent3(int key);
     void handleUserInput();
-    void checkEat();
     void increaseUndefeatable(int secs = 5);
 
 signals:
@@ -60,9 +60,10 @@ signals:
     void died(int id, int lives);
     void overwritten(int index);
     void livesUpdated(int lives);
+    void scoreUpdated(int score);
 
 public slots:
-    void applyEffect(int snakeId, Effect effect);
+    void eatFood(int snakeId, FoodType foodType);
     void die(int snakeId);
     void checkOverwrite(QPoint& p, int index);
 };

@@ -13,8 +13,8 @@ void Foods::resize(int s) {
 void Foods::draw(QPainter *painter)
 {
     for(int i = 0; i < list.size(); ++i) {
-        QPoint p = list[i].pos;
-        QImage img(":/foods/" + list[i].name);
+        QPoint p = list[i].position;
+        QImage img(":/foods/" + list[i].type.name);
         painter->drawImage(QRectF(p.rx()-FOOD_RENDER_OFFSET, p.ry()-FOOD_RENDER_OFFSET, FOOD_RENDER_SIZE, FOOD_RENDER_SIZE), img);
     }
 }
@@ -24,24 +24,24 @@ int Foods::randomFood() {
         return QRandomGenerator::global()->bounded(0, 4);
     } else {
         while(true) {
-            int type = QRandomGenerator::global()->bounded(4, 8);
-            if(FoodTypes[type] == "rocket") {
+            int t = QRandomGenerator::global()->bounded(4, 8);
+            if(FoodTypes[t].name == "rocket") {
                 if(rockets == 2) {
                     continue;
                 } else {
                     ++rockets;
-                    return type;
+                    return t;
                 }
             }
-            if(FoodTypes[type] == "snail") {
+            if(FoodTypes[t].name == "snail") {
                 if(snails == 2) {
                     continue;
                 } else {
                     ++snails;
-                    return type;
+                    return t;
                 }
             }
-            return type;
+            return t;
         }
     }
 }
@@ -60,7 +60,7 @@ void Foods::generate(int num) {
     for(int i = 1; i <= num; ++i) {
         Food food = newFood();
         list.push_back(food);
-        emit foodGenerated(food.pos, list.size() - 1);
+        emit foodGenerated(food.position, list.size() - 1);
     }
 }
 void Foods::regenerate(int index) {
@@ -69,24 +69,24 @@ void Foods::regenerate(int index) {
 }
 void Foods::checkEat(int snakeId, const QPoint& snakeHead) {
     for(int i = 0; i < list.size(); ++i) {
-        if(list[i].pos == snakeHead) {
+        if(list[i].position == snakeHead) {
             Food food = list[i];
             list.remove(i);
-            if(food.name == "rocket") {
+            if(food.type.name == "rocket") {
                 --rockets;
             }
-            if(food.name == "snail") {
+            if(food.type.name == "snail") {
                 --snails;
             }
             generate();
-            emit foodEaten(snakeId, food.effect);
+            emit foodEaten(snakeId, food.type);
             return;
         }
     }
 }
 bool Foods::exists(QPoint p) {
     for(int i = 0; i < list.size(); ++i) {
-        if(list[i].pos == p) {
+        if(list[i].position == p) {
             return true;
         }
     }
@@ -97,7 +97,7 @@ Foods::~Foods()
 
 }
 QDataStream& operator<<(QDataStream& out, const Food& food) {
-    out<<food.type<<food.pos;
+    out<<food.typeIndex<<food.position;
     return out;
 }
 QDataStream& operator<<(QDataStream& out, const Foods& foods) {
@@ -105,10 +105,9 @@ QDataStream& operator<<(QDataStream& out, const Foods& foods) {
     return out;
 }
 QDataStream& operator>>(QDataStream& in, Food& food) {
-    in>>food.type;
-    in>>food.pos;
-    food.name = FoodTypes[food.type];
-    food.effect = FoodEffects[food.type];
+    in>>food.typeIndex;
+    in>>food.position;
+    food.type = FoodTypes[food.typeIndex];
     return in;
 }
 QDataStream& operator>>(QDataStream& in, Foods& foods) {

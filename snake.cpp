@@ -7,7 +7,7 @@
 int Snake::_id = 0;
 
 Snake::Snake(QWidget *parent)
-    : QWidget(parent), id(_id), lives(1)
+    : QWidget(parent), id(_id)
 {
     ++_id;
     heading = SNAKE_HEADINGS[id];
@@ -26,11 +26,13 @@ void Snake::initTimers() {
     timer->start(speed);
     undefeatable = new QDeadlineTimer();
 }
-void Snake::applyEffect(int snakeId, Effect effect) {
+void Snake::eatFood(int snakeId, FoodType foodType) {
     if(snakeId != id) {
         return;
     }
-    switch (effect) {
+    score += foodType.point;
+    emit scoreUpdated(score);
+    switch (foodType.effect) {
     case GROW:
         grow();
         break;
@@ -207,7 +209,6 @@ void Snake::move() {
 void Snake::checkHitSelf() {
     if(body.indexOf(head()) != body.size() - 1) {
         die(id);
-        qDebug()<<body.indexOf(head())<<body.size();
     }
 }
 void Snake::increaseUndefeatable(int secs) {
@@ -249,6 +250,7 @@ bool Snake::isAI() {
 QDataStream& operator<<(QDataStream& out, const Snake& snake) {
     out<<snake.id
        <<snake.lives
+       <<snake.score
        <<snake.speed
        <<snake.heading
        <<snake.undefeatable->remainingTime()
@@ -259,6 +261,7 @@ QDataStream& operator>>(QDataStream& in, Snake& snake) {
     qint64 remainingTime;
     in>>snake.id
       >>snake.lives
+      >>snake.score
       >>snake.speed
       >>snake.heading
       >>remainingTime

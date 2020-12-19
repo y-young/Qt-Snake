@@ -81,7 +81,7 @@ void Map::addPlayer(Snake *player) {
     players.push_back(player);
     connect(player, &Snake::snakeMoved, foods, &Foods::checkEat);
     connect(player, &Snake::snakeMoved, walls, &Walls::checkHit);
-    connect(foods, &Foods::foodEaten, player, &Snake::applyEffect);
+    connect(foods, &Foods::foodEaten, player, &Snake::eatFood);
     connect(walls, &Walls::hitWall, player, &Snake::die);
     connect(foods, &Foods::foodGenerated, player, &Snake::checkOverwrite);
     connect(player, &Snake::overwritten, foods, &Foods::regenerate);

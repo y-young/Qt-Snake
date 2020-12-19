@@ -13,16 +13,14 @@ class Food
     friend QDataStream& operator<<(QDataStream& out, const Food& food);
     friend QDataStream& operator>>(QDataStream& in, Food& food);
 public:
-    int type;
-    QString name;
-    QPoint pos;
-    Effect effect;
+    int typeIndex;
+    QPoint position;
+    FoodType type;
     Food() {}
     Food(QPoint p, int t) {
-        type = t;
-        name = FoodTypes[t];
-        effect = FoodEffects[t];
-        pos = p;
+        typeIndex = t;
+        position = p;
+        type = FoodTypes[t];
     }
 };
 
@@ -50,7 +48,7 @@ private:
     int randomFood();
 
 signals:
-    void foodEaten(int snakeId, Effect effect);
+    void foodEaten(int snakeId, FoodType type);
     void foodGenerated(QPoint& p, int index);
 
 public slots:

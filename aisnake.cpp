@@ -69,7 +69,7 @@ void AISnake::refreshTarget() {
     QPoint current = head();
     int dist = INT_MAX;
     for(int i = 0; i < foods->size(); ++i) {
-        QPoint p = (*foods)[i].pos;
+        QPoint p = (*foods)[i].position;
         int newDist = (p - current).manhattanLength();
         if(newDist < dist) {
             dist = newDist;
