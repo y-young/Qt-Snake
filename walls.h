@@ -9,6 +9,7 @@ class Walls : public QWidget
 {
     Q_OBJECT
 
+    friend class AISnake;
     friend QDataStream& operator<<(QDataStream& out, const Walls& walls);
     friend QDataStream& operator>>(QDataStream& in, Walls& walls);
 public:

@@ -13,6 +13,9 @@ void AISnake::setFoods(Foods *f) {
     connect(f, &Foods::foodEaten, this, &AISnake::refreshTarget);
     refreshTarget();
 }
+void AISnake::setWalls(Walls *w) {
+    walls = &w->list;
+}
 void AISnake::keyEvent(int) {}
 void AISnake::move() {
     QPoint head = body.back();
@@ -52,10 +55,11 @@ void AISnake::decide() {
         }
         int x = current.rx() + direction[i][0];
         int y = current.ry() + direction[i][1];
-        if(body.contains(QPoint(x,y))) {
+        QPoint next(x,y);
+        if(body.contains(next) || walls->contains(next)) {
             continue;
         }
-        int newDist = (QPoint(x, y) - target).manhattanLength();
+        int newDist = (next - target).manhattanLength();
         if(newDist < dist) {
             qDebug() << dist<<newDist<< "choose " << i;
             dist = newDist;

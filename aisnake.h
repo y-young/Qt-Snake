@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "snake.h"
 #include "foods.h"
+#include "walls.h"
 
 class AISnake : public Snake
 {
@@ -12,6 +13,7 @@ class AISnake : public Snake
 public:
     explicit AISnake();
     void setFoods(Foods* f);
+    void setWalls(Walls* w);
     void keyEvent(int key);
     bool isAI() override;
     ~AISnake();
@@ -23,6 +25,7 @@ protected:
 
 private:
     QVector<Food>* foods;
+    QVector<QPoint>* walls;
 
 public slots:
     void refreshTarget();

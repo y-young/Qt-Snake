@@ -72,6 +72,7 @@ void Map::addPlayer(Snake *player) {
     connect(player, &Snake::overwritten, foods, &Foods::regenerate);
     if(player->isAI()) {
         ((AISnake* )player)->setFoods(foods);
+        ((AISnake* )player)->setWalls(walls);
     }
 }
 QDataStream& operator<<(QDataStream& out, const Map& map) {
