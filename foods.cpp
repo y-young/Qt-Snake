@@ -5,7 +5,7 @@
 Foods::Foods(QWidget *parent) :
     QWidget(parent)
 {
-    generate(3);
+    generate(FOOD_NUM);
 }
 void Foods::draw(QPainter *painter)
 {

@@ -43,6 +43,7 @@ private:
     WallType wallType = NONE;
     int selectedFoodIndex = 0;
     void initWalls();
+    void connectFoodsAndWalls();
     QPoint convert2MapPoint(int x, int y);
 
 public slots:

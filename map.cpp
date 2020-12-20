@@ -53,12 +53,15 @@ void Map::keyPressEvent(QKeyEvent *event) {
 void Map::init() {
     foods = new Foods();
     initWalls();
+    connectFoodsAndWalls();
 }
 void Map::initWalls() {
     walls = new Walls();
     if(wallType == SURROUNDING) {
         walls->generateSurroundingWalls();
     }
+}
+void Map::connectFoodsAndWalls() {
     connect(foods, &Foods::foodGenerated, walls, &Walls::checkOverwrite);
     connect(walls, &Walls::overwritten, foods, &Foods::regenerate);
 }
@@ -83,6 +86,7 @@ QDataStream& operator>>(QDataStream& in, Map& map) {
     map.foods = new Foods();
     map.walls = new Walls();
     in>>*(map.foods)>>*(map.walls);
+    map.connectFoodsAndWalls();
     return in;
 }
 void Map::setWallType(WallType type) {

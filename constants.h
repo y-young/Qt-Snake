@@ -10,6 +10,7 @@
 #define SNAKE_LENGTH 4
 #define SNAKE_SPEED 40
 #define SNAKE_MAX_SPEED 30
+#define SNAKE_MIN_SPEED 50
 #define SPEED_STEP 5
 
 enum Heading {UP, LEFT, DOWN, RIGHT};
@@ -30,6 +31,7 @@ enum MapItem { WALLS, FOODS };
 enum WallType {NONE, SURROUNDING};
 
 //foods
+#define FOOD_NUM 3
 #define FOOD_SIZE 4
 #define FOOD_RENDER_SIZE 7
 #define FOOD_RENDER_OFFSET 1.5
