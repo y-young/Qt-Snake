@@ -7,9 +7,6 @@ Foods::Foods(QWidget *parent) :
 {
     generate(3);
 }
-void Foods::resize(int s) {
-    scale = s;
-}
 void Foods::draw(QPainter *painter)
 {
     for(int i = 0; i < list.size(); ++i) {
@@ -61,6 +58,19 @@ void Foods::generate(int num) {
         Food food = newFood();
         list.push_back(food);
         emit foodGenerated(food.position, list.size() - 1);
+    }
+}
+void Foods::add(QPoint pos, int foodIndex) {
+    Food food(pos, foodIndex);
+    list.push_back(food);
+    emit foodGenerated(food.position, list.size() - 1);
+}
+void Foods::remove(QPoint pos) {
+    for(int i = 0; i < list.size(); ++i) {
+        if(list[i].position == pos) {
+            list.remove(i);
+            return;
+        }
     }
 }
 void Foods::regenerate(int index) {

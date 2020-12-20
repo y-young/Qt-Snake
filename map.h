@@ -23,6 +23,9 @@ public:
     void pause();
     void resume();
     void setWallType(WallType type);
+    void startEditing();
+    void finishEditing();
+    void changeEditItem(MapItem item);
     void keyPressEvent(QKeyEvent *event) override;
     ~Map();
 protected:
@@ -35,15 +38,15 @@ private:
     Walls *walls;
     QTimer *timer;
     int scale;
-    bool editing = true;
+    bool editing = false;
     MapItem editingItem = WALLS;
     WallType wallType = NONE;
+    int selectedFoodIndex = 0;
     void initWalls();
-    void editMap();
-    void changeEditingItem(int key);
+    QPoint convert2MapPoint(int x, int y);
 
 public slots:
-
+    void changeFoodType(int foodIndex);
 };
 
 #endif // MAP_H

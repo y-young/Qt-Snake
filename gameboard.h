@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QMessageBox>
 #include <QHBoxLayout>
+#include <QFileDialog>
 #include "snake.h"
 #include "map.h"
 #include "scoreboard.h"
@@ -35,10 +36,14 @@ private:
     QHBoxLayout* mapContainer;
     QVBoxLayout* scoreContainer;
     QVector<ScoreBoard*> scores;
-    void saveGame();
+    void switchPauseResume();
+    void pause();
+    void resume();
     void addPlayer(Snake* player);
     void showPausedDialog();
     void initScoreboard(Snake* player);
+    void initFoodSelect();
+    void initControlPanel();
 
 protected:
     void showEvent(QShowEvent *) override;
@@ -53,6 +58,11 @@ public slots:
     void onlyAI();
     void playerAndAI();
     void snakeDied(int id, int lives);
+    void saveGame();
+    void startEditing();
+    void finishEditing();
+    void editWalls();
+    void editFoods();
 };
 
 #endif // GAMEBOARD_H

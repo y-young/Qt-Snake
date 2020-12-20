@@ -14,6 +14,7 @@ class Walls : public QWidget
 public:
     explicit Walls(QWidget *parent = nullptr);
     void add(QPoint pos);
+    void remove(QPoint pos);
     void generateSurroundingWalls();
     void draw(QPainter *painter);
     ~Walls();

@@ -35,13 +35,12 @@ public:
     explicit Foods(QWidget *parent = nullptr);
     void draw(QPainter *painter);
     void generate(int num = 1);
-    Effect check(const QPoint& p);
-    void resize(int s);
+    void add(QPoint pos, int foodIndex);
+    void remove(QPoint pos);
     ~Foods();
 
 private:
     QVector<Food> list;
-    int scale;
     int rockets, snails;
     bool exists(QPoint p);
     Food newFood();

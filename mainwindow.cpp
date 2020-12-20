@@ -28,6 +28,9 @@ void MainWindow::newGame() {
 }
 void MainWindow::load() {
     QString filename = QFileDialog::getOpenFileName(this, "Open saved file", "./", tr("Saved Files (*.sav)"));
+    if(filename.isEmpty()) {
+        return;
+    }
     game = new GameBoard();
     game->loadGame(filename);
     game->show();

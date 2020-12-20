@@ -31,8 +31,6 @@ void Map::paintEvent(QPaintEvent *)
 }
 void Map::resizeEvent(QResizeEvent *) {
     scale = qMin(width() / MAP_WIDTH, height() / MAP_HEIGHT);
-    foods->resize(scale);
-    qDebug() << width() << height() << scale;
 }
 void Map::pause() {
     for(int i = 0; i < players.size(); ++i) {
@@ -48,21 +46,8 @@ void Map::resume() {
 }
 void Map::keyPressEvent(QKeyEvent *event) {
     int key = event->key();
-    if(editing) {
-        changeEditingItem(key);
-    }
     for(int i = 0; i < players.size(); ++i) {
         players[i]->keyEvent(key);
-    }
-}
-void Map::changeEditingItem(int key) {
-    switch (key) {
-    case Qt::Key_W:
-        editingItem = WALLS;
-        break;
-    case Qt::Key_F:
-        editingItem = FOODS;
-        break;
     }
 }
 void Map::init() {
@@ -102,34 +87,56 @@ QDataStream& operator>>(QDataStream& in, Map& map) {
 void Map::setWallType(WallType type) {
     this->wallType = type;
 }
-void Map::editMap() {
-
+void Map::changeEditItem(MapItem item) {
+    editingItem = item;
+}
+void Map::changeFoodType(int foodIndex) {
+    selectedFoodIndex = foodIndex;
+}
+void Map::startEditing() {
+    editing = true;
+}
+void Map::finishEditing() {
+    editing = false;
+}
+QPoint Map::convert2MapPoint(int x, int y) {
+    // translate
+    x -= WINDOW_WIDTH / 2;
+    y -= WINDOW_HEIGHT / 2;
+    int nx = x, ny = y;
+    // scale
+    nx /= 4;
+    ny /= 4;
+    // round to grid
+    nx -= nx % GRID_SIZE;
+    ny -= ny % GRID_SIZE;
+    if(x < 0) {
+        nx -= GRID_SIZE;
+    }
+    if(y < 0) {
+        ny -= GRID_SIZE;
+    }
+    return QPoint(nx, ny);
 }
 void Map::mousePressEvent(QMouseEvent *event) {
     if(!editing) {
         return;
     }
-    int x = event->x(), y = event->y();
-    // translate
-    x -= WINDOW_WIDTH / 2;
-    y -= WINDOW_HEIGHT / 2;
-    // scale
-    x /= 4;
-    y /= 4;
-    // round to grid
-    x -= x % GRID_SIZE;
-    y -= y % GRID_SIZE;
-    if(x < 0) {
-        x -= GRID_SIZE;
-    }
-    if(y < 0) {
-        y -= GRID_SIZE;
-    }
-//    qDebug() << x << y;
+    QPoint position = convert2MapPoint(event->x(), event->y());
     if(event->button() == Qt::LeftButton) {
-        walls->add(QPoint(x, y));
-        this->update();
+        if(editingItem == WALLS) {
+            walls->add(position);
+        } else if(editingItem == FOODS) {
+            foods->add(position, selectedFoodIndex);
+        }
+    } else if(event->button() == Qt::RightButton) {
+        if(editingItem == WALLS) {
+            walls->remove(position);
+        } else if(editingItem == FOODS) {
+            foods->remove(position);
+        }
     }
+    this->update();
 }
 Map::~Map()
 {

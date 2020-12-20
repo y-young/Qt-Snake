@@ -41,6 +41,9 @@ void Walls::add(QPoint pos) {
     }
     list.append(pos);
 }
+void Walls::remove(QPoint pos) {
+    list.removeOne(pos);
+}
 void Walls::checkHit(int snakeId, const QPoint& head) {
     if(list.contains(head)) {
         emit hitWall(snakeId);

@@ -33,6 +33,7 @@ enum WallType {NONE, SURROUNDING};
 #define FOOD_SIZE 4
 #define FOOD_RENDER_SIZE 7
 #define FOOD_RENDER_OFFSET 1.5
+#define FOOD_TYPE_NUM 8
 enum Effect {GROW, EXTEND, DIE, SPEED_UP, SLOW_DOWN, UNDEFEATABLE};
 struct FoodType {
     friend QDataStream& operator<<(QDataStream& out, const FoodType& type);

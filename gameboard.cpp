@@ -14,6 +14,8 @@ GameBoard::GameBoard(QWidget *parent) :
     map->setFixedSize(QSize(WINDOW_WIDTH, WINDOW_HEIGHT));
     ui->MapLayout->addWidget(map);
     ui->SidebarLayout->setAlignment(Qt::AlignTop);
+    initFoodSelect();
+    initControlPanel();
 }
 void GameBoard::init() {
     map->init();
@@ -23,6 +25,21 @@ void GameBoard::initScoreboard(Snake* player) {
     ScoreBoard* scoreboard = new ScoreBoard(player, this);
     ui->ScoreBoardLayout->addWidget(scoreboard);
     scores.push_back(scoreboard);
+}
+void GameBoard::initFoodSelect() {
+    for(int i = 0; i < FOOD_TYPE_NUM; ++i) {
+        ui->FoodSelect->addItem(FoodTypes[i].name);
+    }
+}
+void GameBoard::initControlPanel() {
+    connect(ui->PauseResumeButton, &QPushButton::clicked, this, &GameBoard::switchPauseResume);
+    connect(ui->SaveGameButton, &QPushButton::clicked, this, &GameBoard::saveGame);
+    connect(ui->QuitButton, &QPushButton::clicked, this, [=] { QApplication::exit(0);});
+    connect(ui->EditButton, &QPushButton::clicked, this, &GameBoard::startEditing);
+    connect(ui->SaveMapButton, &QPushButton::clicked, this, &GameBoard::finishEditing);
+    connect(ui->WallsButton, &QRadioButton::clicked, this, &GameBoard::editWalls);
+    connect(ui->FoodsButton, &QRadioButton::clicked, this, &GameBoard::editFoods);
+    connect(ui->FoodSelect, QOverload<int>::of(&QComboBox::currentIndexChanged), map, &Map::changeFoodType);
 }
 void GameBoard::addPlayer(Snake* player) {
     players.push_back(player);
@@ -40,9 +57,49 @@ void GameBoard::initPlayers() {
         addPlayer(ai);
     }
 }
+void GameBoard::switchPauseResume() {
+    if(ui->PauseResumeButton->text() == "Pause") {
+        pause();
+    } else {
+        resume();
+    }
+}
+void GameBoard::pause() {
+    map->pause();
+    ui->PauseResumeButton->setText("Resume");
+    ui->SaveGameButton->setDisabled(false);
+    ui->EditButton->setDisabled(false);
+}
+void GameBoard::resume() {
+    map->resume();
+    ui->PauseResumeButton->setText("Pause");
+    ui->SaveGameButton->setDisabled(true);
+    ui->EditButton->setDisabled(true);
+}
+void GameBoard::startEditing() {
+    ui->GameControlWidget->setCurrentIndex(1);
+    map->startEditing();
+}
+void GameBoard::finishEditing() {
+    ui->GameControlWidget->setCurrentIndex(0);
+    map->finishEditing();
+}
+void GameBoard::editWalls() {
+    ui->FoodSelect->setDisabled(true);
+    map->changeEditItem(WALLS);
+}
+void GameBoard::editFoods() {
+    ui->FoodSelect->setDisabled(false);
+    map->changeEditItem(FOODS);
+}
 void GameBoard::saveGame() {
     QString currentTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh-mm-ss");
-    QFile file(currentTime + ".sav");
+    QString filename = currentTime + ".sav";
+    filename = QFileDialog::getSaveFileName(this, "Open saved file", "./" + filename, tr("Saved Files (*.sav)"));
+    if(filename.isEmpty()) {
+        return;
+    }
+    QFile file(filename);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         return;
     }
@@ -58,6 +115,7 @@ void GameBoard::saveGame() {
         out<<*(players[playerNum]);
     }
     file.close();
+    QMessageBox::information(this, "Save Game", "Game saved successfully.");
 }
 void GameBoard::loadGame(QString filename) {
     QFile file(filename);
@@ -103,11 +161,14 @@ void GameBoard::keyPressEvent(QKeyEvent *event) {
     int key = event->key();
     switch(key) {
     case Qt::Key_P:
-        map->pause();
-        showPausedDialog();
+        pause();
+//        showPausedDialog();
         break;
     case Qt::Key_R:
-        map->resume();
+        resume();
+        break;
+    case Qt::Key_Escape:
+        QApplication::exit(0);
         break;
     default:
         map->keyPressEvent(event);
