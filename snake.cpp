@@ -222,6 +222,11 @@ void Snake::increaseUndefeatable(int secs) {
 QPoint Snake::head() {
     return body.back();
 }
+// reset length & speed
+void Snake::reset() {
+    speed = SNAKE_SPEED;
+    body.remove(0, body.size() - SNAKE_LENGTH);
+}
 void Snake::die(int snakeId) {
     if(snakeId != id) {
         return;
@@ -232,6 +237,7 @@ void Snake::die(int snakeId) {
     --lives;
     emit died(id, lives);
     emit livesUpdated(lives);
+    reset();
     if(lives > 0) {
         increaseUndefeatable(3);
     }

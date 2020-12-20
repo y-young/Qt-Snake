@@ -47,6 +47,7 @@ private:
     int scale;
     std::queue<Heading> userInputs;
     void constructBody();
+    void reset();
     void initTimers();
     void keyEvent1(int key);
     void keyEvent2(int key);
