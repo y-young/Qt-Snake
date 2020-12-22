@@ -5,6 +5,8 @@
 Foods::Foods(QWidget *parent) :
     QWidget(parent)
 {
+}
+void Foods::init() {
     generate(FOOD_NUM);
 }
 void Foods::draw(QPainter *painter)

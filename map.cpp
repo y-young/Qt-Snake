@@ -54,6 +54,7 @@ void Map::init() {
     foods = new Foods();
     initWalls();
     connectFoodsAndWalls();
+    foods->init();
 }
 void Map::initWalls() {
     walls = new Walls();

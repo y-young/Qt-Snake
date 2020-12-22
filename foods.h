@@ -33,6 +33,7 @@ class Foods : public QWidget
     friend QDataStream& operator>>(QDataStream& in, Foods& foods);
 public:
     explicit Foods(QWidget *parent = nullptr);
+    void init();
     void draw(QPainter *painter);
     void generate(int num = 1);
     void add(QPoint pos, int foodIndex);
