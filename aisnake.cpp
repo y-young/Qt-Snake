@@ -20,38 +20,17 @@ void AISnake::setWalls(Walls *w) {
 }
 void AISnake::keyEvent(int) {}
 void AISnake::move() {
-    QPoint head = body.back();
-    body.pop_front();
-    int x = head.rx() + direction[heading][0];
-    int y = head.ry() + direction[heading][1];
-    int width = MAP_WIDTH;
-    int height = MAP_HEIGHT;
-    int w = width/2, h = height/2;
-    if(x < -w) {
-        x += width;
-    }
-    if(x >= w) {
-        x -= width;
-    }
-    if(y < -h) {
-        y += height;
-    }
-    if(y >= h) {
-        y -= height;
-    }
-    head.setX(x);
-    head.setY(y);
-    body.push_back(head);
-    checkHitSelf();
-    decide();
-    emit Snake::snakeMoved(id, head);
+    Snake::move();
+    autoMove();
 }
-void AISnake::decide() {
+void AISnake::autoMove() {
     QPoint current = head();
     int dist = INT_MAX;
     int newHeading = heading;
     refreshTarget();
+    // check 3 possible directions
     for(int i = 0; i < 4; ++i) {
+        // avoid turning around
         if(heading - i == 2 || heading - i == -2) {
             continue;
         }
@@ -69,6 +48,7 @@ void AISnake::decide() {
     }
     setHeading(static_cast<Heading>(newHeading));
 }
+// refresh target food
 void AISnake::refreshTarget() {
     QPoint current = head();
     int dist = INT_MAX;

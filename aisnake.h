@@ -14,7 +14,7 @@ public:
     explicit AISnake();
     void setFoods(Foods* f);
     void setWalls(Walls* w);
-    void keyEvent(int key);
+    void keyEvent(int key) override;
     bool isAI() override;
     QString name() override;
     ~AISnake();
@@ -22,7 +22,7 @@ public:
 protected:
     QPoint target;
     void move() override;
-    void decide();
+    void autoMove();
 
 private:
     QVector<Food>* foods;

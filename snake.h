@@ -22,7 +22,7 @@ public:
     Snake(QWidget *parent = nullptr);
     void render(QPainter *painter);
     void grow();
-    void keyEvent(int key);
+    virtual void keyEvent(int key);
     QPoint head();
     void pause();
     void resume();
@@ -40,6 +40,7 @@ protected:
     int speed = SNAKE_SPEED;
     virtual void move();
     void setHeading(Heading newHeading);
+    void processTeleport(int &x, int &y);
     void checkHitSelf();
 
 private:

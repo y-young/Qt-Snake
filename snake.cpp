@@ -190,15 +190,8 @@ void Snake::handleUserInput() {
     userInputs.pop();
     setHeading(newHeading);
 }
-void Snake::move() {
-    if(isDead()) {
-        return;
-    }
-    handleUserInput();
-    QPoint head = body.back();
-    body.pop_front();
-    int x = head.rx() + direction[heading][0];
-    int y = head.ry() + direction[heading][1];
+// if snake passes the border, teleport it to the other side
+void Snake::processTeleport(int &x, int &y) {
     int width = MAP_WIDTH;
     int height = MAP_HEIGHT;
     int w = width/2, h = height/2;
@@ -214,6 +207,17 @@ void Snake::move() {
     if(y >= h) {
         y -= height;
     }
+}
+void Snake::move() {
+    if(isDead()) {
+        return;
+    }
+    handleUserInput();
+    QPoint head = body.back();
+    body.pop_front();
+    int x = head.rx() + direction[heading][0];
+    int y = head.ry() + direction[heading][1];
+    processTeleport(x, y);
     head.setX(x);
     head.setY(y);
     body.push_back(head);
