@@ -46,3 +46,7 @@ You may use game control panel on the right side or keyboard shortcuts specified
 
 ### Map Editing
 Choose the map item to edit and the type of food from control panel, left-click to add item, right-click to remove.
+
+## Tips
+
+To enjoy best experience, use 150% scaling.

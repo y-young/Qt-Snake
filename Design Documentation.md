@@ -41,7 +41,7 @@ Defines game configurations, enumerables and types.
 - AI and Player
 
 ### 2 Types of Walls
-- No Walls: Snake is transported to the other side when crossing the borders
+- No Walls: Snake is teleported to the other side when crossing the borders
 - Surrounding Walls: Walls on 4 sides, player will die when hitting the walls
 
 ### 9 Kinds of Foods
