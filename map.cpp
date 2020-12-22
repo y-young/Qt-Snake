@@ -24,10 +24,10 @@ void Map::paintEvent(QPaintEvent *)
 
     painter.setPen(Qt::NoPen);
     for(int i = 0; i < players.size(); ++i) {
-        players[i]->draw(&painter);
+        players[i]->render(&painter);
     }
-    foods->draw(&painter);
-    walls->draw(&painter);
+    foods->render(&painter);
+    walls->render(&painter);
 }
 void Map::resizeEvent(QResizeEvent *) {
     scale = qMin(width() / MAP_WIDTH, height() / MAP_HEIGHT);

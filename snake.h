@@ -20,7 +20,7 @@ public:
     int score = 0;
     QDeadlineTimer *undefeatable = nullptr;
     Snake(QWidget *parent = nullptr);
-    void draw(QPainter *painter);
+    void render(QPainter *painter);
     void grow();
     void keyEvent(int key);
     QPoint head();

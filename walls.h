@@ -17,7 +17,7 @@ public:
     void add(QPoint pos);
     void remove(QPoint pos);
     void generateSurroundingWalls();
-    void draw(QPainter *painter);
+    void render(QPainter *painter);
     ~Walls();
 
 private:

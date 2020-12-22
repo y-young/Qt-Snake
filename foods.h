@@ -34,7 +34,7 @@ class Foods : public QWidget
 public:
     explicit Foods(QWidget *parent = nullptr);
     void init();
-    void draw(QPainter *painter);
+    void render(QPainter *painter);
     void generate(int num = 1);
     void add(QPoint pos, int foodIndex);
     void remove(QPoint pos);

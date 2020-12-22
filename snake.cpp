@@ -70,7 +70,7 @@ void Snake::accelerate() {
         timer->setInterval(speed);
     }
 }
-void Snake::draw(QPainter *painter)
+void Snake::render(QPainter *painter)
 {
     if(isDead()) {
         return;

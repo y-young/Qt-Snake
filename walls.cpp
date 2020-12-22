@@ -7,7 +7,7 @@ Walls::Walls(QWidget *parent) :
     QWidget(parent)
 {
 }
-void Walls::draw(QPainter *painter)
+void Walls::render(QPainter *painter)
 {
     painter->setBrush(QColor(WALL_COLOR));
     for(int i = 0; i < list.size(); ++i) {

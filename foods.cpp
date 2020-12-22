@@ -9,7 +9,7 @@ Foods::Foods(QWidget *parent) :
 void Foods::init() {
     generate(FOOD_NUM);
 }
-void Foods::draw(QPainter *painter)
+void Foods::render(QPainter *painter)
 {
     for(int i = 0; i < list.size(); ++i) {
         QPoint p = list[i].position;
