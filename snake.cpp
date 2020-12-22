@@ -49,6 +49,9 @@ void Snake::eatFood(int snakeId, FoodType foodType) {
         ++lives;
         emit livesUpdated(lives);
         break;
+    case RESET:
+        reset();
+        break;
     default:
         break;
     }

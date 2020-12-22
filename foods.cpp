@@ -23,7 +23,7 @@ int Foods::randomFood() {
         return QRandomGenerator::global()->bounded(0, 4);
     } else {
         while(true) {
-            int t = QRandomGenerator::global()->bounded(4, 8);
+            int t = QRandomGenerator::global()->bounded(4, FOOD_TYPE_NUM);
             if(FoodTypes[t].name == "rocket") {
                 if(rockets == 2) {
                     continue;

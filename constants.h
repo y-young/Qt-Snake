@@ -27,7 +27,7 @@ const Heading SNAKE_HEADINGS[] = {RIGHT, LEFT, RIGHT};
 #define MAP_WIDTH 240
 #define MAP_HEIGHT 160
 #define RENDER_SPEED 30
-enum MapItem { WALLS, FOODS };
+enum MapItem {WALLS, FOODS};
 enum WallType {NONE, SURROUNDING};
 
 //foods
@@ -35,8 +35,8 @@ enum WallType {NONE, SURROUNDING};
 #define FOOD_SIZE 4
 #define FOOD_RENDER_SIZE 7
 #define FOOD_RENDER_OFFSET 1.5
-#define FOOD_TYPE_NUM 8
-enum Effect {GROW, EXTEND, DIE, SPEED_UP, SLOW_DOWN, UNDEFEATABLE};
+#define FOOD_TYPE_NUM 9
+enum Effect {GROW, EXTEND, DIE, SPEED_UP, SLOW_DOWN, UNDEFEATABLE, RESET};
 struct FoodType {
     friend QDataStream& operator<<(QDataStream& out, const FoodType& type);
     QString name;
@@ -58,13 +58,15 @@ const FoodType
     rocket("rocket", SPEED_UP),
     snail("snail", SLOW_DOWN),
     shield("shield", UNDEFEATABLE),
-    heart("heart", EXTEND)
+    heart("heart", EXTEND),
+    green_apple("green_apple", RESET)
 ;
 const FoodType FoodTypes[] = {
     apple, grape, peach, pear,
     rocket, snail,
     shield,
-    heart
+    heart,
+    green_apple
 };
 
 //walls

@@ -8,5 +8,6 @@
         <file alias="heart">images/1F499.png</file>
         <file alias="snail">images/1F40C.png</file>
         <file alias="shield">images/1F6E1.png</file>
+        <file alias="green_apple">images/1F34F.png</file>
     </qresource>
 </RCC>
