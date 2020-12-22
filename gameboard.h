@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QHBoxLayout>
 #include <QFileDialog>
+#include <QDateTime>
 #include "snake.h"
 #include "map.h"
 #include "scoreboard.h"
@@ -33,15 +34,11 @@ private:
     bool withAi = false;
     QVector<Snake*> players;
     Map* map;
-    QHBoxLayout* container;
-    QHBoxLayout* mapContainer;
-    QVBoxLayout* scoreContainer;
-    QVector<ScoreBoard*> scores;
+    QVector<ScoreBoard*> scoreboards;
     void switchPauseResume();
     void pause();
     void resume();
     void addPlayer(Snake* player);
-    void showPausedDialog();
     void initScoreboard(Snake* player);
     void initFoodSelect();
     void initControlPanel();

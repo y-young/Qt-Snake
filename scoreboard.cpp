@@ -13,8 +13,8 @@ ScoreBoard::ScoreBoard(Snake* p, QWidget *parent) :
     timer->start(1000);
 
     setName(player);
-    updateLives(player->lives);
-    updateScore(player->score);
+    updateLives(player->getLives());
+    updateScore(player->getScore());
     updateUndefeatableTime();
     connect(player, &Snake::livesUpdated, this, &ScoreBoard::updateLives);
     connect(player, &Snake::scoreUpdated, this, &ScoreBoard::updateScore);
@@ -32,7 +32,7 @@ void ScoreBoard::updateScore(int score) {
     ui->Score->setText(QString::number(score));
 }
 void ScoreBoard::updateUndefeatableTime() {
-    setUndefeatableTime(player->undefeatable->remainingTime());
+    setUndefeatableTime(player->undefeatableTime());
 }
 ScoreBoard::~ScoreBoard()
 {

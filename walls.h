@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QVector>
+#include <QPainter>
 #include "constants.h"
 
 class Walls : public QWidget
@@ -14,10 +15,10 @@ class Walls : public QWidget
     friend QDataStream& operator>>(QDataStream& in, Walls& walls);
 public:
     explicit Walls(QWidget *parent = nullptr);
+    void render(QPainter *painter);
     void add(QPoint pos);
     void remove(QPoint pos);
     void generateSurroundingWalls();
-    void render(QPainter *painter);
     ~Walls();
 
 private:

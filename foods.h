@@ -3,7 +3,8 @@
 
 #include <QWidget>
 #include <QVector>
-#include <QTime>
+#include <QPainter>
+#include <QImage>
 #include <QRandomGenerator>
 #include <QtDebug>
 #include "constants.h"
@@ -45,7 +46,7 @@ private:
     int rockets, snails;
     bool exists(QPoint p);
     Food newFood();
-    int randomFood();
+    int randomFoodType();
 
 signals:
     void foodEaten(int snakeId, FoodType type);

@@ -1,6 +1,6 @@
 #include "foods.h"
-#include <QPainter>
-#include <QImage>
+
+// public methods:
 
 Foods::Foods(QWidget *parent) :
     QWidget(parent)
@@ -17,7 +17,52 @@ void Foods::render(QPainter *painter)
         painter->drawImage(QRectF(p.rx()-FOOD_RENDER_OFFSET, p.ry()-FOOD_RENDER_OFFSET, FOOD_RENDER_SIZE, FOOD_RENDER_SIZE), img);
     }
 }
-int Foods::randomFood() {
+void Foods::generate(int num) {
+    for(int i = 1; i <= num; ++i) {
+        Food food = newFood();
+        list.push_back(food);
+        emit foodGenerated(food.position, list.size() - 1);
+    }
+}
+void Foods::add(QPoint pos, int foodIndex) {
+    Food food(pos, foodIndex);
+    list.push_back(food);
+    emit foodGenerated(food.position, list.size() - 1);
+}
+void Foods::remove(QPoint pos) {
+    for(int i = 0; i < list.size(); ++i) {
+        if(list[i].position == pos) {
+            list.remove(i);
+            return;
+        }
+    }
+}
+Foods::~Foods()
+{
+}
+
+// private methods:
+
+bool Foods::exists(QPoint p) {
+    for(int i = 0; i < list.size(); ++i) {
+        if(list[i].position == p) {
+            return true;
+        }
+    }
+    return false;
+}
+Food Foods::newFood() {
+    int width = MAP_WIDTH/FOOD_SIZE;
+    int height = MAP_HEIGHT/FOOD_SIZE;
+    int x, y;
+    do {
+        x = FOOD_SIZE * QRandomGenerator::global()->bounded(-width/2, width/2);
+        y = FOOD_SIZE * QRandomGenerator::global()->bounded(-height/2, height/2);
+    } while(exists(QPoint(x,y)));
+    int type = randomFoodType();
+    return Food(QPoint(x,y), type);
+}
+int Foods::randomFoodType() {
     int rand = QRandomGenerator::global()->bounded(101);
     if(rand <= 70) { // normal fruits
         return QRandomGenerator::global()->bounded(0, 4);
@@ -44,41 +89,9 @@ int Foods::randomFood() {
         }
     }
 }
-Food Foods::newFood() {
-    int width = MAP_WIDTH/FOOD_SIZE;
-    int height = MAP_HEIGHT/FOOD_SIZE;
-    int x, y;
-    do {
-        x = FOOD_SIZE * QRandomGenerator::global()->bounded(-width/2, width/2);
-        y = FOOD_SIZE * QRandomGenerator::global()->bounded(-height/2, height/2);
-    } while(exists(QPoint(x,y)));
-    int type = randomFood();
-    return Food(QPoint(x,y), type);
-}
-void Foods::generate(int num) {
-    for(int i = 1; i <= num; ++i) {
-        Food food = newFood();
-        list.push_back(food);
-        emit foodGenerated(food.position, list.size() - 1);
-    }
-}
-void Foods::add(QPoint pos, int foodIndex) {
-    Food food(pos, foodIndex);
-    list.push_back(food);
-    emit foodGenerated(food.position, list.size() - 1);
-}
-void Foods::remove(QPoint pos) {
-    for(int i = 0; i < list.size(); ++i) {
-        if(list[i].position == pos) {
-            list.remove(i);
-            return;
-        }
-    }
-}
-void Foods::regenerate(int index) {
-    list.remove(index);
-    generate();
-}
+
+// slots:
+
 void Foods::checkEat(int snakeId, const QPoint& snakeHead) {
     for(int i = 0; i < list.size(); ++i) {
         if(list[i].position == snakeHead) {
@@ -96,18 +109,13 @@ void Foods::checkEat(int snakeId, const QPoint& snakeHead) {
         }
     }
 }
-bool Foods::exists(QPoint p) {
-    for(int i = 0; i < list.size(); ++i) {
-        if(list[i].position == p) {
-            return true;
-        }
-    }
-    return false;
+void Foods::regenerate(int index) {
+    list.remove(index);
+    generate();
 }
-Foods::~Foods()
-{
 
-}
+// friends:
+
 QDataStream& operator<<(QDataStream& out, const Food& food) {
     out<<food.typeIndex<<food.position;
     return out;

@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <QFileDialog>
-
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::MainWindow)
@@ -14,13 +12,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->QuitButton, &QPushButton::released, this, QOverload<>::of(&MainWindow::quit));
     connect(settingsDialog, &QDialog::rejected, this, QOverload<>::of(&MainWindow::show));
 }
-void MainWindow::keyPressEvent(QKeyEvent*)
+void MainWindow::keyPressEvent(QKeyEvent* event)
 {
-//    if (event->key() == Qt::Key_Escape)
-//    {
-//        QApplication::exit(0);
-//    }
-//    QWidget::keyPressEvent(event);
+    if (event->key() == Qt::Key_Escape)
+    {
+        QApplication::exit(0);
+    }
 }
 void MainWindow::newGame() {
     this->hide();

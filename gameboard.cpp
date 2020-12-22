@@ -25,7 +25,7 @@ void GameBoard::init() {
 void GameBoard::initScoreboard(Snake* player) {
     ScoreBoard* scoreboard = new ScoreBoard(player, this);
     ui->ScoreBoardLayout->addWidget(scoreboard);
-    scores.push_back(scoreboard);
+    scoreboards.push_back(scoreboard);
 }
 void GameBoard::initFoodSelect() {
     for(int i = 0; i < FOOD_TYPE_NUM; ++i) {
@@ -135,30 +135,11 @@ void GameBoard::loadGame(QString filename) {
     }
     file.close();
 }
-void GameBoard::showPausedDialog() {
-    QMessageBox msgBox(this);
-    msgBox.setWindowTitle("Game Paused");
-    msgBox.setText("Game paused.\nWhat would you like to do?");
-    QPushButton *resumeButton = msgBox.addButton("Resume", QMessageBox::AcceptRole);
-    QPushButton *saveButton = msgBox.addButton(QMessageBox::Save);
-    msgBox.addButton("Edit map", QMessageBox::NoRole);
-    QPushButton *quitButton = msgBox.addButton("Quit", QMessageBox::RejectRole);
-    msgBox.exec();
-    QPushButton* clicked = (QPushButton*) msgBox.clickedButton();
-    if(clicked == resumeButton) {
-        map->resume();
-    } else if(clicked == saveButton) {
-        saveGame();
-    } else if(clicked == quitButton) {
-        QApplication::exit(0);
-    }
-}
 void GameBoard::keyPressEvent(QKeyEvent *event) {
     int key = event->key();
     switch(key) {
     case Qt::Key_P:
         pause();
-//        showPausedDialog();
         break;
     case Qt::Key_R:
         resume();
@@ -197,7 +178,6 @@ void GameBoard::showEvent(QShowEvent *) {
     map->resume();
 }
 void GameBoard::snakeDied(int snakeId) {
-//    map->pause();
     --playersAlive;
     if(playersAlive == 0) {
         gameOver(snakeId);
@@ -210,7 +190,7 @@ void GameBoard::gameOver(int surviverId) {
     msgBox.setWindowTitle("Game Over");
     // calculate the result
     if(playerNum == 1 && withAi == false) {
-        result += "your final score: " + QString::number(players[0]->score);
+        result += "your final score: " + QString::number(players[0]->getScore());
     } else {
         // judge who is the winner
         int maxScore = -1;
@@ -218,11 +198,12 @@ void GameBoard::gameOver(int surviverId) {
         QString winner;
         for(int i = 0; i < playerNum; ++i) {
             Snake* player = players[i];
-            if(player->score > maxScore) {
+            int score = player->getScore();
+            if(score > maxScore) {
                 winner = player->name();
-                maxScore = player->score;
+                maxScore = score;
                 tie = false;
-            } else if(player->score == maxScore) { // may be a tie
+            } else if(score == maxScore) { // may be a tie
                 tie = true;
             }
         }

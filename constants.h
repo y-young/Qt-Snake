@@ -6,12 +6,17 @@
 
 #define GRID_SIZE 4
 
-//snake
+// snake
+
+// snake initial length
 #define SNAKE_LENGTH 4
+// snake initial speed, measured in rendering interval
 #define SNAKE_SPEED 40
 #define SNAKE_MAX_SPEED 30
 #define SNAKE_MIN_SPEED 50
 #define SPEED_STEP 5
+// undefeatable time after resurgence
+#define RESURGE_COOLDOWN 3
 
 enum Heading {UP, LEFT, DOWN, RIGHT};
 const int direction[4][2] = {
@@ -21,7 +26,8 @@ const QColor AI_SNAKE_COLOR = QColor("orange");
 const QString SNAKE_COLORS[] = {"red", "blue", "green"};
 const Heading SNAKE_HEADINGS[] = {RIGHT, LEFT, RIGHT};
 
-//map
+// map
+
 #define WINDOW_WIDTH 960
 #define WINDOW_HEIGHT 640
 #define MAP_WIDTH 240
@@ -30,12 +36,14 @@ const Heading SNAKE_HEADINGS[] = {RIGHT, LEFT, RIGHT};
 enum MapItem {WALLS, FOODS};
 enum WallType {NONE, SURROUNDING};
 
-//foods
+// foods
+
 #define FOOD_NUM 3
 #define FOOD_SIZE 4
 #define FOOD_RENDER_SIZE 7
 #define FOOD_RENDER_OFFSET 1.5
 #define FOOD_TYPE_NUM 9
+#define FOOD_UNDEFEATABLE 5
 enum Effect {GROW, EXTEND, DIE, ACCELERATE, DECELERATE, UNDEFEATABLE, RESET};
 struct FoodType {
     friend QDataStream& operator<<(QDataStream& out, const FoodType& type);
@@ -69,7 +77,7 @@ const FoodType FoodTypes[] = {
     green_apple
 };
 
-//walls
+// walls
 const QString WALL_COLOR = "#e9e8e8";
 
 #endif // CONSTANTS_H

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QWidget>
+#include <QFileDialog>
 #include "settingsdialog.h"
 #include "gameboard.h"
 

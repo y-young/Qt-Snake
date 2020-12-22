@@ -1,14 +1,11 @@
 #include "aisnake.h"
-#include <QTimer>
-#include <QDeadlineTimer>
+
+// public methods:
 
 AISnake::AISnake() :
     Snake()
 {
     color = AI_SNAKE_COLOR;
-}
-QString AISnake::name() {
-    return "AI";
 }
 void AISnake::setFoods(Foods *f) {
     foods = &f->list;
@@ -19,10 +16,25 @@ void AISnake::setWalls(Walls *w) {
     walls = &w->list;
 }
 void AISnake::keyEvent(int) {}
+bool AISnake::isAI() {
+    return true;
+}
+QString AISnake::name() {
+    return "AI";
+}
+AISnake::~AISnake()
+{
+}
+
+// protected methods:
+
 void AISnake::move() {
     Snake::move();
     autoMove();
 }
+
+// private methods:
+
 void AISnake::autoMove() {
     QPoint current = head();
     int dist = INT_MAX;
@@ -48,6 +60,9 @@ void AISnake::autoMove() {
     }
     setHeading(static_cast<Heading>(newHeading));
 }
+
+// slots:
+
 // refresh target food
 void AISnake::refreshTarget() {
     QPoint current = head();
@@ -60,11 +75,4 @@ void AISnake::refreshTarget() {
             target = p;
         }
     }
-}
-bool AISnake::isAI() {
-    return true;
-}
-AISnake::~AISnake()
-{
-
 }

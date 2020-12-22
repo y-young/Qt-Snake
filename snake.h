@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QKeyEvent>
 #include <QVector>
+#include <QPainter>
+#include <QTimer>
 #include <QDeadlineTimer>
 #include <queue>
 #include "constants.h"
@@ -15,46 +17,50 @@ class Snake : public QWidget
     friend QDataStream& operator<<(QDataStream& out, const Snake& snake);
     friend QDataStream& operator>>(QDataStream& in, Snake& snake);
 public:
-    int id;
-    int lives = 1;
-    int score = 0;
-    QDeadlineTimer *undefeatable = nullptr;
     Snake(QWidget *parent = nullptr);
     void render(QPainter *painter);
-    void grow();
     virtual void keyEvent(int key);
-    QPoint head();
     void pause();
     void resume();
+    int getId();
     virtual QString name();
+    QPoint head();
+    int getLives();
+    int getScore();
+    int undefeatableTime();
+    virtual bool isAI();
     bool isDead();
     ~Snake();
-    virtual bool isAI();
 
 protected:
+    int id;
     static int _id;
     QColor color;
     QTimer *timer;
+    QDeadlineTimer *undefeatable = nullptr;
     QVector<QPoint> body;
     Heading heading;
     int speed = SNAKE_SPEED;
     virtual void move();
     void setHeading(Heading newHeading);
-    void processTeleport(int &x, int &y);
-    void checkHitSelf();
 
 private:
+    int lives = 1;
+    int score = 0;
     std::queue<Heading> userInputs;
     void constructBody();
+    void processTeleport(int &x, int &y);
+    void checkHitSelf();
     void reset();
     void initTimers();
+    void grow();
     void accelerate();
     void decelerate();
     void keyEvent1(int key);
     void keyEvent2(int key);
     void keyEvent3(int key);
     void handleUserInput();
-    void increaseUndefeatable(int secs = 5);
+    void increaseUndefeatable(int secs = FOOD_UNDEFEATABLE);
 
 signals:
     void snakeMoved(int id, QPoint &head);
