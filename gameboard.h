@@ -29,7 +29,8 @@ public:
 private:
     Ui::GameBoard *ui;
     int playerNum = 1;
-    bool ai = false;
+    int playersAlive;
+    bool withAi = false;
     QVector<Snake*> players;
     Map* map;
     QHBoxLayout* container;
@@ -44,6 +45,7 @@ private:
     void initScoreboard(Snake* player);
     void initFoodSelect();
     void initControlPanel();
+    void gameOver(int surviverId);
 
 protected:
     void showEvent(QShowEvent *) override;
@@ -57,7 +59,7 @@ public slots:
     void triplePlayers();
     void onlyAI();
     void playerAndAI();
-    void snakeDied(int id, int lives);
+    void snakeDied(int snakeId);
     void saveGame();
     void startEditing();
     void finishEditing();

@@ -19,6 +19,7 @@ GameBoard::GameBoard(QWidget *parent) :
 }
 void GameBoard::init() {
     map->init();
+    playersAlive = playerNum;
     initPlayers();
 }
 void GameBoard::initScoreboard(Snake* player) {
@@ -45,14 +46,14 @@ void GameBoard::addPlayer(Snake* player) {
     players.push_back(player);
     map->addPlayer(player);
     initScoreboard(player);
-    connect(player, &Snake::died, this, &GameBoard::snakeDied);
+    connect(player, &Snake::snakeDied, this, &GameBoard::snakeDied);
 }
 void GameBoard::initPlayers() {
-    for(int i = 1; i <= playerNum; ++i) {
+    for(int i = 1; i <= playerNum - static_cast<int>(withAi); ++i) {
         Snake* player = new Snake(this);
         addPlayer(player);
     }
-    if(ai) {
+    if(withAi) {
         AISnake* ai = new AISnake();
         addPlayer(ai);
     }
@@ -105,14 +106,10 @@ void GameBoard::saveGame() {
     }
 
     QDataStream out(&file);
-    out<<playerNum;
+    out<<playerNum<<playersAlive<<withAi;
     out<<*map;
     for(int i = 0; i < playerNum; ++i) {
         out<<*(players[i]);
-    }
-    out<<ai;
-    if(ai) {
-        out<<*(players[playerNum]);
     }
     file.close();
     QMessageBox::information(this, "Save Game", "Game saved successfully.");
@@ -124,15 +121,14 @@ void GameBoard::loadGame(QString filename) {
     }
 
     QDataStream in(&file);
-    in>>playerNum;
+    in>>playerNum>>playersAlive>>withAi;
     in>>*map;
-    for(int i = 0; i < playerNum; ++i) {
+    for(int i = 0; i < playerNum - static_cast<int>(withAi); ++i) {
         Snake* player = new Snake(this);
         in>>(*player);
         addPlayer(player);
     }
-    in>>ai;
-    if(ai) {
+    if(withAi) {
         AISnake* ai = new AISnake();
         in>>(*ai);
         addPlayer(ai);
@@ -184,12 +180,12 @@ void GameBoard::triplePlayers() {
     playerNum = 3;
 }
 void GameBoard::onlyAI() {
-    playerNum = 0;
-    ai = true;
+    playerNum = 1;
+    withAi = true;
 }
 void GameBoard::playerAndAI() {
-    playerNum = 1;
-    ai = true;
+    playerNum = 2;
+    withAi = true;
 }
 void GameBoard::noWalls() {
     map->setWallType(NONE);
@@ -200,20 +196,44 @@ void GameBoard::surroundingWalls() {
 void GameBoard::showEvent(QShowEvent *) {
     map->resume();
 }
-void GameBoard::snakeDied(int id, int lives) {
-    map->pause();
-    QMessageBox msgBox;
-    if(lives == 0) {
-        msgBox.setWindowTitle("Game Over");
-        msgBox.setText("Game over!");
-        msgBox.exec();
-        QApplication::exit(0);
-    } else {
-        msgBox.setWindowTitle("Player Died");
-        msgBox.setText("Player " + QString::number(id) + " died, " + QString::number(lives) + " live(s) remained.");
-        msgBox.exec();
-        map->resume();
+void GameBoard::snakeDied(int snakeId) {
+//    map->pause();
+    --playersAlive;
+    if(playersAlive == 0) {
+        gameOver(snakeId);
     }
+}
+void GameBoard::gameOver(int surviverId) {
+    pause();
+    QMessageBox msgBox;
+    QString result = "Game over, ";
+    msgBox.setWindowTitle("Game Over");
+    // calculate the result
+    if(playerNum == 1 && withAi == false) {
+        result += "your final score: " + QString::number(players[0]->score);
+    } else {
+        // judge who is the winner
+        int maxScore = -1;
+        bool tie = false;
+        QString winner;
+        for(int i = 0; i < playerNum; ++i) {
+            Snake* player = players[i];
+            if(player->score > maxScore) {
+                winner = player->name();
+                maxScore = player->score;
+                tie = false;
+            } else if(player->score == maxScore) { // may be a tie
+                tie = true;
+            }
+        }
+        if(tie) { // if scores are equal, the last surviver is the winner
+            winner = players[surviverId]->name();
+        }
+        result += winner + " is the winner!";
+    }
+    msgBox.setText(result);
+    msgBox.exec();
+    QApplication::exit(0);
 }
 GameBoard::~GameBoard()
 {

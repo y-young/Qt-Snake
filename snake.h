@@ -23,16 +23,18 @@ public:
     void draw(QPainter *painter);
     void grow();
     void keyEvent(int key);
-    void resize(int s);
     void slowDown();
     void speedUp();
     QPoint head();
     void pause();
     void resume();
+    virtual QString name();
+    bool isDead();
     ~Snake();
     virtual bool isAI();
 
 protected:
+    static int _id;
     QColor color;
     QTimer *timer;
     QVector<QPoint> body;
@@ -43,8 +45,6 @@ protected:
     void checkHitSelf();
 
 private:
-    static int _id;
-    int scale;
     std::queue<Heading> userInputs;
     void constructBody();
     void reset();
@@ -57,8 +57,7 @@ private:
 
 signals:
     void snakeMoved(int id, QPoint &head);
-    void gameOver();
-    void died(int id, int lives);
+    void snakeDied(int id);
     void overwritten(int index);
     void livesUpdated(int lives);
     void scoreUpdated(int score);

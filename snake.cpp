@@ -69,6 +69,9 @@ void Snake::speedUp() {
 }
 void Snake::draw(QPainter *painter)
 {
+    if(isDead()) {
+        return;
+    }
     QColor c = color;
     painter->setBrush(c);
     //draw head
@@ -92,9 +95,15 @@ void Snake::pause() {
     timer->stop();
 }
 void Snake::resume() {
+    if(isDead()) {
+        return;
+    }
     timer->start(speed);
 }
 void Snake::keyEvent(int key) {
+    if(isDead()) {
+        return;
+    }
     switch (id) {
     case 0:
         keyEvent1(key);
@@ -170,9 +179,6 @@ void Snake::grow() {
     tail.setY(tail.ry() + dy);
     body.push_front(tail);
 }
-void Snake::resize(int s) {
-    scale = s;
-}
 void Snake::handleUserInput() {
     if(userInputs.empty()) {
         return;
@@ -182,6 +188,9 @@ void Snake::handleUserInput() {
     setHeading(newHeading);
 }
 void Snake::move() {
+    if(isDead()) {
+        return;
+    }
     handleUserInput();
     QPoint head = body.back();
     body.pop_front();
@@ -224,6 +233,12 @@ void Snake::increaseUndefeatable(int secs) {
 QPoint Snake::head() {
     return body.back();
 }
+QString Snake::name() {
+    return "Player " + QString::number(id);
+}
+bool Snake::isDead() {
+    return lives == 0;
+}
 // reset length & speed
 void Snake::reset() {
     speed = SNAKE_SPEED;
@@ -237,11 +252,13 @@ void Snake::die(int snakeId) {
         return;
     }
     --lives;
-    emit died(id, lives);
     emit livesUpdated(lives);
     reset();
     if(lives > 0) {
         increaseUndefeatable(3);
+    } else {
+        pause();
+        emit snakeDied(id);
     }
 }
 void Snake::checkOverwrite(QPoint& p, int index) {

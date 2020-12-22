@@ -16,6 +16,7 @@ public:
     void setWalls(Walls* w);
     void keyEvent(int key);
     bool isAI() override;
+    QString name() override;
     ~AISnake();
 
 protected:

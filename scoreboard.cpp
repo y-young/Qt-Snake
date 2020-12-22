@@ -20,11 +20,7 @@ ScoreBoard::ScoreBoard(Snake* p, QWidget *parent) :
     connect(player, &Snake::scoreUpdated, this, &ScoreBoard::updateScore);
 }
 void ScoreBoard::setName(Snake* player) {
-    if(player->isAI()) {
-        ui->PlayerName->setText("AI");
-    } else {
-        ui->PlayerName->setText("Player " + QString::number(player->id));
-    }
+    ui->PlayerName->setText(player->name());
 }
 void ScoreBoard::setUndefeatableTime(int time) {
     ui->UndefeatableTime->setText(QString::number(time / 1000) + " s");

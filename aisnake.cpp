@@ -5,8 +5,10 @@
 AISnake::AISnake() :
     Snake()
 {
-    id = 3;
     color = AI_SNAKE_COLOR;
+}
+QString AISnake::name() {
+    return "AI";
 }
 void AISnake::setFoods(Foods *f) {
     foods = &f->list;
@@ -61,12 +63,10 @@ void AISnake::decide() {
         }
         int newDist = (next - target).manhattanLength();
         if(newDist < dist) {
-            qDebug() << dist<<newDist<< "choose " << i;
             dist = newDist;
             newHeading = i;
         }
     }
-    qDebug() <<"heading: "<<heading<<"newheading: " <<static_cast<Heading>(newHeading)<<"\n";
     setHeading(static_cast<Heading>(newHeading));
 }
 void AISnake::refreshTarget() {
@@ -80,7 +80,6 @@ void AISnake::refreshTarget() {
             target = p;
         }
     }
-    qDebug() << target;
 }
 bool AISnake::isAI() {
     return true;
