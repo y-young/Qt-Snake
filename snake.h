@@ -23,8 +23,6 @@ public:
     void draw(QPainter *painter);
     void grow();
     void keyEvent(int key);
-    void slowDown();
-    void speedUp();
     QPoint head();
     void pause();
     void resume();
@@ -49,6 +47,8 @@ private:
     void constructBody();
     void reset();
     void initTimers();
+    void accelerate();
+    void decelerate();
     void keyEvent1(int key);
     void keyEvent2(int key);
     void keyEvent3(int key);

@@ -36,11 +36,11 @@ void Snake::eatFood(int snakeId, FoodType foodType) {
     case GROW:
         grow();
         break;
-    case SPEED_UP:
-        speedUp();
+    case ACCELERATE:
+        accelerate();
         break;
-    case SLOW_DOWN:
-        slowDown();
+    case DECELERATE:
+        decelerate();
         break;
     case UNDEFEATABLE:
         increaseUndefeatable();
@@ -56,14 +56,14 @@ void Snake::eatFood(int snakeId, FoodType foodType) {
         break;
     }
 }
-void Snake::slowDown() {
+void Snake::decelerate() {
     int newSpeed = speed + SPEED_STEP;
     if(newSpeed <= SNAKE_MIN_SPEED) {
         speed = newSpeed;
         timer->setInterval(speed);
     }
 }
-void Snake::speedUp() {
+void Snake::accelerate() {
     int newSpeed = speed - SPEED_STEP;
     if(newSpeed >= SNAKE_MAX_SPEED) {
         speed = newSpeed;

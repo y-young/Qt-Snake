@@ -36,7 +36,7 @@ enum WallType {NONE, SURROUNDING};
 #define FOOD_RENDER_SIZE 7
 #define FOOD_RENDER_OFFSET 1.5
 #define FOOD_TYPE_NUM 9
-enum Effect {GROW, EXTEND, DIE, SPEED_UP, SLOW_DOWN, UNDEFEATABLE, RESET};
+enum Effect {GROW, EXTEND, DIE, ACCELERATE, DECELERATE, UNDEFEATABLE, RESET};
 struct FoodType {
     friend QDataStream& operator<<(QDataStream& out, const FoodType& type);
     QString name;
@@ -55,8 +55,8 @@ const FoodType
     grape("grape", GROW, 5),
     pear("pear", GROW, 10),
     peach("peach", GROW, 20),
-    rocket("rocket", SPEED_UP),
-    snail("snail", SLOW_DOWN),
+    rocket("rocket", ACCELERATE),
+    snail("snail", DECELERATE),
     shield("shield", UNDEFEATABLE),
     heart("heart", EXTEND),
     green_apple("green_apple", RESET)
