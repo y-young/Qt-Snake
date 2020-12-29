@@ -153,12 +153,15 @@ void GameBoard::keyPressEvent(QKeyEvent *event) {
 }
 void GameBoard::singlePlayer() {
     playerNum = 1;
+    withAi = false;
 }
 void GameBoard::doublePlayers() {
     playerNum = 2;
+    withAi = false;
 }
 void GameBoard::triplePlayers() {
     playerNum = 3;
+    withAi = false;
 }
 void GameBoard::onlyAI() {
     playerNum = 1;
