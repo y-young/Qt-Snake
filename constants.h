@@ -66,15 +66,15 @@ const FoodType
     rocket("rocket", ACCELERATE),
     snail("snail", DECELERATE),
     shield("shield", UNDEFEATABLE),
-    heart("heart", EXTEND),
-    green_apple("green_apple", RESET)
+    green_apple("green_apple", RESET),
+    heart("heart", EXTEND)
 ;
 const FoodType FoodTypes[] = {
     apple, grape, peach, pear,
     rocket, snail,
     shield,
-    heart,
-    green_apple
+    green_apple,
+    heart
 };
 
 // walls

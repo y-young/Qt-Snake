@@ -64,11 +64,11 @@ Food Foods::newFood() {
 }
 int Foods::randomFoodType() {
     int rand = QRandomGenerator::global()->bounded(101);
-    if(rand <= 70) { // normal fruits
+    if(rand <= 80) { // normal fruits
         return QRandomGenerator::global()->bounded(0, 4);
-    } else {
+    } else if(rand <= 95) {
         while(true) {
-            int t = QRandomGenerator::global()->bounded(4, FOOD_TYPE_NUM);
+            int t = QRandomGenerator::global()->bounded(4, 7);
             if(FoodTypes[t].name == "rocket") {
                 if(rockets == 2) {
                     continue;
@@ -87,6 +87,9 @@ int Foods::randomFoodType() {
             }
             return t;
         }
+    } else {
+        int t = QRandomGenerator::global()->bounded(7, FOOD_TYPE_NUM);
+        return t;
     }
 }
 
