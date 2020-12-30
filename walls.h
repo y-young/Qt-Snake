@@ -25,12 +25,14 @@ private:
     QVector<QPoint> list;
 
 signals:
+    void wallAdded(const QPoint& p);
     void hitWall(int snakeId);
-    void overwritten(int index);
+    void overwritten(const QPoint& p);
 
 public slots:
     void checkHit(int snakeId, const QPoint& head);
-    void checkOverwrite(QPoint& p, int index);
+    void checkOverwrite(const QPoint& p);
+    void handleOverwritten(const QPoint& p);
 };
 
 #endif // WALLS_H

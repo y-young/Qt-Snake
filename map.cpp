@@ -65,6 +65,8 @@ void Map::initWalls() {
 void Map::connectFoodsAndWalls() {
     connect(foods, &Foods::foodGenerated, walls, &Walls::checkOverwrite);
     connect(walls, &Walls::overwritten, foods, &Foods::regenerate);
+    connect(walls, &Walls::wallAdded, foods, &Foods::checkOverwrite);
+    connect(foods, &Foods::overwritten, walls, &Walls::handleOverwritten);
 }
 void Map::addPlayer(Snake *player) {
     players.push_back(player);
@@ -74,6 +76,8 @@ void Map::addPlayer(Snake *player) {
     connect(walls, &Walls::hitWall, player, &Snake::die);
     connect(foods, &Foods::foodGenerated, player, &Snake::checkOverwrite);
     connect(player, &Snake::overwritten, foods, &Foods::regenerate);
+    connect(walls, &Walls::wallAdded, player, &Snake::checkOverwrite);
+    connect(player, &Snake::overwritten, walls, &Walls::handleOverwritten);
     if(player->isAI()) {
         ((AISnake* )player)->setFoods(foods);
         ((AISnake* )player)->setWalls(walls);

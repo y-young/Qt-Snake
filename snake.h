@@ -65,14 +65,14 @@ private:
 signals:
     void snakeMoved(int id, QPoint &head);
     void snakeDied(int id);
-    void overwritten(int index);
+    void overwritten(const QPoint& p);
     void livesUpdated(int lives);
     void scoreUpdated(int score);
 
 public slots:
     void eatFood(int snakeId, FoodType foodType);
     void die(int snakeId);
-    void checkOverwrite(QPoint& p, int index);
+    void checkOverwrite(const QPoint& p);
 };
 
 #endif // SNAKE_H

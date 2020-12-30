@@ -20,6 +20,7 @@ void Walls::add(QPoint pos) {
         return;
     }
     list.append(pos);
+    emit wallAdded(pos);
 }
 void Walls::remove(QPoint pos) {
     list.removeOne(pos);
@@ -55,10 +56,13 @@ void Walls::checkHit(int snakeId, const QPoint& head) {
         emit hitWall(snakeId);
     }
 }
-void Walls::checkOverwrite(QPoint& p, int index) {
+void Walls::checkOverwrite(const QPoint& p) {
     if(list.contains(p)) {
-        emit overwritten(index);
+        emit overwritten(p);
     }
+}
+void Walls::handleOverwritten(const QPoint& p) {
+    list.removeOne(p);
 }
 
 // friends:

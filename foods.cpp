@@ -21,21 +21,25 @@ void Foods::generate(int num) {
     for(int i = 1; i <= num; ++i) {
         Food food = newFood();
         list.push_back(food);
-        emit foodGenerated(food.position, list.size() - 1);
+        emit foodGenerated(food.position);
     }
 }
 void Foods::add(QPoint pos, int foodIndex) {
+    if(exists(pos)) {
+        return;
+    }
     Food food(pos, foodIndex);
     list.push_back(food);
-    emit foodGenerated(food.position, list.size() - 1);
+    emit foodGenerated(food.position);
 }
-void Foods::remove(QPoint pos) {
+bool Foods::remove(QPoint pos) {
     for(int i = 0; i < list.size(); ++i) {
         if(list[i].position == pos) {
             list.remove(i);
-            return;
+            return true;
         }
     }
+    return false;
 }
 Foods::~Foods()
 {
@@ -112,9 +116,15 @@ void Foods::checkEat(int snakeId, const QPoint& snakeHead) {
         }
     }
 }
-void Foods::regenerate(int index) {
-    list.remove(index);
-    generate();
+void Foods::checkOverwrite(const QPoint& p) {
+    if(exists(p)) {
+        emit overwritten(p);
+    }
+}
+void Foods::regenerate(const QPoint& p) {
+    if(remove(p)) {
+        generate();
+    }
 }
 
 // friends:

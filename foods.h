@@ -38,7 +38,7 @@ public:
     void render(QPainter *painter);
     void generate(int num = 1);
     void add(QPoint pos, int foodIndex);
-    void remove(QPoint pos);
+    bool remove(QPoint pos);
     ~Foods();
 
 private:
@@ -50,11 +50,13 @@ private:
 
 signals:
     void foodEaten(int snakeId, FoodType type);
-    void foodGenerated(QPoint& p, int index);
+    void foodGenerated(const QPoint& p);
+    void overwritten(const QPoint& p);
 
 public slots:
     void checkEat(int id, const QPoint& head);
-    void regenerate(int index);
+    void checkOverwrite(const QPoint& p);
+    void regenerate(const QPoint& p);
 };
 
 #endif // FOODS_H

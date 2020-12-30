@@ -296,9 +296,9 @@ void Snake::die(int snakeId) {
         emit snakeDied(id);
     }
 }
-void Snake::checkOverwrite(QPoint& p, int index) {
+void Snake::checkOverwrite(const QPoint& p) {
     if(body.contains(p)) {
-        emit overwritten(index);
+        emit overwritten(p);
     }
 }
 
